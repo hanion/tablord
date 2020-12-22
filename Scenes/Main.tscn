@@ -1,0 +1,273 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://Themes/Theme_Game.tres" type="Theme" id=2]
+[ext_resource path="res://Themes/fonts/montserrat/Montserrat-Black.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Themes/fonts/font_title.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Scripts/Main.gd" type="Script" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+use_filter = true
+font_data = ExtResource( 3 )
+
+[node name="Main" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bg" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.203922, 0.203922, 0.203922, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="online_margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="logo" type="TextureRect" parent="online_margin"]
+visible = false
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1004.0
+margin_bottom = 580.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 1 )
+expand = true
+
+[node name="primer" type="VBoxContainer" parent="online_margin"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1004.0
+margin_bottom = 580.0
+custom_constants/separation = 20
+
+[node name="name" type="LineEdit" parent="online_margin/primer"]
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+align = 1
+max_length = 12
+placeholder_text = "Name"
+
+[node name="HBox" type="HBoxContainer" parent="online_margin/primer"]
+margin_top = 290.0
+margin_right = 984.0
+margin_bottom = 560.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="join" type="Button" parent="online_margin/primer/HBox"]
+margin_right = 482.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+disabled = true
+text = "JOIN"
+
+[node name="Settings" type="VBoxContainer" parent="online_margin/primer/HBox"]
+visible = false
+margin_left = 479.0
+margin_right = 504.0
+margin_bottom = 270.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settings" type="Button" parent="online_margin/primer/HBox/Settings"]
+margin_right = 25.0
+margin_bottom = 29.0
+text = "O"
+
+[node name="AmanBilmemne" type="Button" parent="online_margin/primer/HBox/Settings"]
+margin_top = 33.0
+margin_right = 25.0
+margin_bottom = 62.0
+text = "X"
+
+[node name="exit falan" type="Button" parent="online_margin/primer/HBox/Settings"]
+margin_top = 66.0
+margin_right = 25.0
+margin_bottom = 95.0
+text = ">"
+
+[node name="host" type="Button" parent="online_margin/primer/HBox"]
+margin_left = 502.0
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+disabled = true
+text = "HOST"
+
+[node name="join" type="VBoxContainer" parent="online_margin"]
+visible = false
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1004.0
+margin_bottom = 580.0
+custom_constants/separation = 20
+
+[node name="VBox" type="VBoxContainer" parent="online_margin/join"]
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="ip" type="LineEdit" parent="online_margin/join/VBox"]
+margin_right = 984.0
+margin_bottom = 125.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+text = "127.0.0.1"
+align = 1
+max_length = 12
+placeholder_text = "IP Address"
+
+[node name="port" type="LineEdit" parent="online_margin/join/VBox"]
+margin_top = 145.0
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+text = "6969"
+align = 1
+max_length = 12
+placeholder_text = "Port"
+
+[node name="HBox" type="HBoxContainer" parent="online_margin/join"]
+margin_top = 290.0
+margin_right = 984.0
+margin_bottom = 560.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="join" type="Button" parent="online_margin/join/HBox"]
+margin_right = 482.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0.0493107, 0.339844, 0, 1 )
+custom_colors/font_color = Color( 0.337255, 1, 0.223529, 1 )
+custom_colors/font_color_hover = Color( 0.249822, 1, 0.121094, 1 )
+custom_colors/font_color_pressed = Color( 0.147321, 1, 0, 1 )
+text = "JOIN"
+
+[node name="cancel" type="Button" parent="online_margin/join/HBox"]
+margin_left = 502.0
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0.384314, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 0.0980392, 0.0980392, 1 )
+custom_colors/font_color_hover = Color( 1, 0.0823529, 0.0823529, 1 )
+custom_colors/font_color_pressed = Color( 1, 0, 0, 1 )
+text = "CANCEL"
+
+[node name="host" type="VBoxContainer" parent="online_margin"]
+visible = false
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 1004.0
+margin_bottom = 580.0
+custom_constants/separation = 20
+
+[node name="VBox" type="VBoxContainer" parent="online_margin/host"]
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="ip" type="LineEdit" parent="online_margin/host/VBox"]
+margin_right = 984.0
+margin_bottom = 125.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+align = 1
+max_length = 12
+editable = false
+placeholder_text = "IP Address"
+
+[node name="port" type="LineEdit" parent="online_margin/host/VBox"]
+margin_top = 145.0
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+text = "6969"
+align = 1
+max_length = 12
+placeholder_text = "Port"
+
+[node name="HBox" type="HBoxContainer" parent="online_margin/host"]
+margin_top = 290.0
+margin_right = 984.0
+margin_bottom = 560.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+
+[node name="cancel" type="Button" parent="online_margin/host/HBox"]
+margin_right = 482.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0.384314, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 0.0980392, 0.0980392, 1 )
+custom_colors/font_color_hover = Color( 1, 0.0823529, 0.0823529, 1 )
+custom_colors/font_color_pressed = Color( 1, 0, 0, 1 )
+text = "CANCEL"
+
+[node name="host" type="Button" parent="online_margin/host/HBox"]
+margin_left = 502.0
+margin_right = 984.0
+margin_bottom = 270.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color_disabled = Color( 0.0493107, 0.339844, 0, 1 )
+custom_colors/font_color = Color( 0.337255, 1, 0.223529, 1 )
+custom_colors/font_color_hover = Color( 0.249822, 1, 0.121094, 1 )
+custom_colors/font_color_pressed = Color( 0.147321, 1, 0, 1 )
+text = "HOST"
+[connection signal="text_changed" from="online_margin/primer/name" to="." method="_on_name_text_changed"]
+[connection signal="pressed" from="online_margin/primer/HBox/join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="online_margin/primer/HBox/host" to="." method="_on_host_pressed"]
+[connection signal="text_changed" from="online_margin/join/VBox/ip" to="." method="_on_ip_text_changed"]
+[connection signal="text_changed" from="online_margin/join/VBox/port" to="." method="_on_port_text_changed"]
+[connection signal="pressed" from="online_margin/join/HBox/join" to="." method="_on_jjoin_pressed"]
+[connection signal="pressed" from="online_margin/join/HBox/cancel" to="." method="_on_cancel_pressed"]
+[connection signal="text_changed" from="online_margin/host/VBox/port" to="." method="_on_port_text_changed"]
+[connection signal="pressed" from="online_margin/host/HBox/cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="online_margin/host/HBox/host" to="." method="_on_hhost_pressed"]

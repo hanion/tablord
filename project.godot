@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
+
+[application]
+
+config/name="Tablord"
+run/main_scene="res://Scenes/Main.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+List="*res://Scripts/list.gd"
+PluginSettings="*res://addons/github-integration/scripts/PluginSettings.gd"
+
+[display]
+
+window/size/always_on_top=true
+window/size/test_width=512
+window/size/test_height=300
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "Todo_Manager", "zylann.project_stats" )
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
