@@ -75,6 +75,20 @@ material/0 = SubResource( 4 )
 [node name="CollisionShape" type="CollisionShape" parent="dice2"]
 shape = SubResource( 5 )
 
+[node name="dice3" type="RigidBody" parent="."]
+transform = Transform( 0.610461, 0.337788, 0.716405, -0.257366, -0.770819, 0.582752, 0.749065, -0.540125, -0.383621, 1.28703, 4.71183, 0.895772 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="dice3" type="MeshInstance" parent="dice3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="CollisionShape" type="CollisionShape" parent="dice3"]
+shape = SubResource( 5 )
+
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2.25266, 4.87704 )
 
