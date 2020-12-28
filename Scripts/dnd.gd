@@ -6,6 +6,7 @@ var draggables = []
 var camera: Camera
 var draging
 var current = null
+onready var table = get_node("../..")
 
 #######################
 # OVERRIDE FUNCTIONS 
@@ -15,7 +16,7 @@ func _ready():
 	set_physics_process(false)
 
 func _input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_MIDDLE:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.is_pressed():
 			var a = clicked_at()
 			if a:
@@ -88,11 +89,13 @@ func moving(var cast):
 	)
 	$Tween.start()
 	current.linear_velocity = (trgt-current.translation)*3
+#	table.obj_pos(current.name,current.translation)
 
 
 
 func _drag_start(node):
 	draging = node
+	table._register_moving_obj(draging)
 	set_physics_process(true)
 func _drag_stop():
 	$Tween.stop_all()

@@ -18,7 +18,6 @@ func _physics_process(_delta):
 	frames += 1
 	if frames%3 == 0:
 		parent.my_pos(
-		get_tree().get_network_unique_id(),
 		cam.global_transform.origin,
 		orr.global_transform.origin
 		)
