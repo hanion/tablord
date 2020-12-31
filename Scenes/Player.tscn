@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/CamController.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_transparent = true
+albedo_color = Color( 0.0862745, 0, 0.576471, 0.207843 )
+
+[sub_resource type="SphereMesh" id=2]
+material = SubResource( 1 )
+radius = 0.2
+height = 0.4
+
+[node name="Player" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.50235 )
+script = ExtResource( 2 )
+ray_length = 100
+
+[node name="CamController" type="Spatial" parent="."]
+script = ExtResource( 1 )
+movement_speed = 10.0
+min_zoom = 0.0
+max_zoom = 84.5
+rotation_speed = -20.0
+inverted_y = true
+
+[node name="Elevation" type="Spatial" parent="CamController"]
+transform = Transform( 1, 0, 0, 0, 0.716302, 0.697791, 0, -0.697791, 0.716302, 0, 0, 0 )
+
+[node name="Camera" type="Camera" parent="CamController/Elevation"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6 )
+
+[node name="Tween" type="Tween" parent="CamController"]
+
+[node name="origin" type="MeshInstance" parent="CamController"]
+mesh = SubResource( 2 )
+material/0 = null

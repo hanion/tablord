@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scripts/dnd.gd" type="Script" id=1]
+
+[node name="dnd" type="Spatial"]
+script = ExtResource( 1 )
+drag_offset = 0.11
+
+[node name="Tween" type="Tween" parent="."]

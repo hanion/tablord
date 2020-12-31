@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=2]
+
+[sub_resource type="CubeMesh" id=20]
+size = Vector3( 5, 1.5, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=21]
+albedo_color = Color( 0.14902, 0.14902, 0.14902, 1 )
+
+[sub_resource type="BoxShape" id=22]
+extents = Vector3( 2.5, 0.75, 0.05 )
+
+[sub_resource type="CubeMesh" id=23]
+size = Vector3( 5, 0.1, 0.4 )
+
+[sub_resource type="SpatialMaterial" id=24]
+albedo_color = Color( 0.141176, 0.156863, 0.168627, 1 )
+
+[sub_resource type="BoxShape" id=25]
+extents = Vector3( 2.5, 0.05, 0.2 )
+
+[node name="Deck" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.636442, 3.70651 )
+
+[node name="KinematicBody" type="KinematicBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25188, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
+mesh = SubResource( 20 )
+material/0 = SubResource( 21 )
+
+[node name="CollisionShape" type="CollisionShape" parent="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
+shape = SubResource( 22 )
+
+[node name="KinematicBody2" type="KinematicBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.502358, 4.76837e-07 )
+
+[node name="MeshInstance" type="MeshInstance" parent="KinematicBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
+mesh = SubResource( 23 )
+material/0 = SubResource( 24 )
+
+[node name="CollisionShape" type="CollisionShape" parent="KinematicBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
+shape = SubResource( 25 )

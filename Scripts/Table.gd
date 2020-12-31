@@ -32,7 +32,7 @@ func _physics_process(_delta):
 func _register_moving_obj(var obj):
 	if not currently_moving.has(obj):
 		currently_moving.append(obj)
-		obj.sleeping = false
+#		obj.sleeping = false
 	
 
 
