@@ -1,35 +1,46 @@
 extends Spatial
-
+#######################
+# EXPORT VARIABLES
+#######################
 export(int) var ray_length = 0
 export(float,0,10) var drag_offset = 0.1
 
+#######################
+# VARIABLES
+#######################
 # current_cast 
 var current = null # is cast
 # object we are currently holding
 var dragging = null # is node
 var is_dragging := false # is state
 
+
 onready var parent = get_parent()
 onready var camera = $CamController/Elevation/Camera
 onready var orr = $CamController/origin
+
 #######################
 # OVERRIDE FUNCTIONS 
 #######################
-
 func _input(event):
+	# cast_ray is in _input() instead of _process because:
+	## we dont need to cast ray (for highlighting or moving)
+	## if there is no input
 	cast_ray(event)
 
 
-var frames := 0
+var _frames := 0
 func _physics_process(_delta):
+	#TODO old code, change it 
+	## bkz:Trello Fix camera
 	if get_tree().has_network_peer():
-		frames += 1
-		if frames%3 == 0:
+		_frames += 1
+		if _frames%3 == 0:
 			parent.my_pos(
 			camera.global_transform.origin,
 			orr.global_transform.origin
 			)
-		frames = 0
+		_frames = 0
 	
 	if is_dragging:
 		drag()
@@ -38,7 +49,6 @@ func _physics_process(_delta):
 #######################
 # FUNCTIONS 
 #######################
-
 func cast_ray(event):
 	# mouse position
 	var mouse = get_viewport().get_mouse_position()
@@ -50,7 +60,7 @@ func cast_ray(event):
 	var cast = camera.get_world().direct_space_state.intersect_ray(
 		from,to,
 		# if we are currently dragging an object we dont want our cast to hit it
-		# we want our cast to hit things behind the object
+		## we want our cast to hit things behind the object
 		[dragging] if is_dragging else [],
 		# in case the dragging objects collision mask is different
 		dragging.get_collision_mask() if is_dragging else 2147483647,
@@ -58,85 +68,110 @@ func cast_ray(event):
 		true,true
 		)
 	
-	# if cast intersected with something
-	if not cast.empty():
-		# cast is object we are hovering
-		# or
-		# cast is mouse intersecting with ground 
-		# and cast is target position
-		# 
-		# we need to assign it to current_cast to be able to move dragging object
-		current = cast
-		
-		# we dont need to update highlight if we are not moving mouse
-		if event is InputEventMouseMotion:
-			highlight(current)
-		#TODO dont highlight object when dragging it
-		
-		# called **once** everytime there is an input (click or release)
-		if event is InputEventMouseButton:
-			if event.button_index == BUTTON_LEFT:
-				# if pressing mouse left button
-				if event.is_pressed():
-					if current:
-						
-						get_node("../CanvasLayer/Label").text =\
-							str(int(get_node("../CanvasLayer/Label").text)+1)
-						
-						#start moving
-						_drag_start(current)
-				# if released button and currently dragging an object
-				elif current:
-					get_node("../CanvasLayer/Label5").text =\
-							str(int(get_node("../CanvasLayer/Label5").text)+1)
-					
-					#stop moving
-					_drag_stop()
-
-
-
-
-
-func drag():
-	var obj = dragging
-	get_node("../CanvasLayer/Label2").text = str(current)
-	if obj is RigidBody:
-		obj.sleeping = false
-		obj.linear_velocity = Vector3.ZERO
 	
+	# cast is object we are hovering
+	## or
+	## cast is mouse intersecting with ground 
+	## and cast is target position
+	##
+	## we need to assign it to current_cast to be able to move dragging object
+	current = cast
+	
+	# called **once** everytime there is a moving input 
+	## (not called when mouse is stationary)
+	# we dont need to update highlight if we are not moving mouse
+	if event is InputEventMouseMotion:
+		highlight(current)
+	
+	#TODOF dont highlight object when dragging it
+	##FIXED we are excluding dragging object from intersecting with cast
+	
+	# called **once** everytime there is an input (click or release)
+	if event is InputEventMouseButton:
+		if event.button_index == BUTTON_LEFT:
+			# if pressing mouse left button
+			if event.is_pressed():
+				# if cast is intersencting with something
+				# if current_cast is pointing to an object
+				if not current.empty():
+					# start moving
+					_drag_start(current)
+			# if released button
+			else:
+				# we dont need to check current_cast because we will stop
+				## dragging even if there is nothing in current_cast
+				
+				# stop moving
+				_drag_stop()
+
+
+
+# called from _physics_process every frame while is_dragging is true
+func drag():
+	# if there is nothing to drag then return
+	if current.empty(): return
+	# if dragging is not draggable      then return
+	if not dragging.is_in_group("draggable"): return
+	
+	# debug
+	get_node("../CanvasLayer/Label2").text = str(current)
+	
+	# if we are dragging a rigidbody we need to wake it
+	## and clear its linear velocity because:
+	### it builds up gravitational force when held in air
+	### we want to clear that velocity
+	if dragging is RigidBody:
+		dragging.sleeping = false
+		dragging.linear_velocity = Vector3.ZERO
+	
+	# target position of dragging object
 	var trgt = (
+		# position of mouse intersecting with something
 		current['position']
-		+
+		+ 
+		# giving it an offset
 		( current['normal'] * Vector3(0,drag_offset,0) )
 	)
-	
-	obj.set_translation(trgt)
+	# translating object to desired location
+	dragging.set_translation(trgt)
 
 
 
 
 func highlight(_cast):
+	# if cast isnt intersecting with anything, there is nothing to highlight
+	if _cast.empty():
+		return
+	
 	var obj = _cast['collider']
 	if obj.is_in_group("highlight"):
+		#TODO highlight
 		get_node("../CanvasLayer/Label4").text = "*"+str(obj.name)+"*"
 	else:
+		#TODO clear highlight
 		get_node("../CanvasLayer/Label4").text = str(obj.name)
 
 
 func _drag_start(_current):
 	is_dragging = true
 	dragging = _current['collider']
+	# debug
 	get_node("../CanvasLayer/Label3").text = "dragging:"+str(_current['collider'].name)
+	get_node("../CanvasLayer/Label").text =\
+			str(int(get_node("../CanvasLayer/Label").text)+1)
 
 
 func _drag_stop():
 	is_dragging = false
+	
+	# debug
 	get_node("../CanvasLayer/Label3").text = "not dragging"
+	get_node("../CanvasLayer/Label5").text =\
+			str(int(get_node("../CanvasLayer/Label5").text)+1)
 
 
 
-
-
+# OLD CODE REPLACE IT
 func roll_dice(var obj):
 	if obj.is_in_group("dice"):
 		obj.sleeping = false
