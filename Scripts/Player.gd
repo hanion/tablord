@@ -4,6 +4,8 @@ extends Spatial
 #######################
 export(int) var ray_length = 0
 export(float,0,10) var drag_offset = 0.1
+# default step for _rotating_degree
+export(float,1,15) var rotating_degree_default := 5 # is angle
 
 #######################
 # VARIABLES
@@ -13,11 +15,16 @@ var current = null # is cast
 # object we are currently holding
 var dragging = null # is node
 var is_dragging := false # is state
-
+var _rotating_degree := 0 # is angle
 
 onready var parent = get_parent()
 onready var camera = $CamController/Elevation/Camera
 onready var orr = $CamController/origin
+
+var is_pp_on = false
+var pp_off_env = preload("res://default_env.tres")
+var pp_on_env = preload("res://Table_env.tres")
+
 
 #######################
 # OVERRIDE FUNCTIONS 
@@ -27,7 +34,16 @@ func _input(event):
 	## we dont need to cast ray (for highlighting or moving)
 	## if there is no input
 	cast_ray(event)
-
+	
+	# temporary code for testing performace
+	#######
+	if Input.is_action_just_pressed("toggle_p_p"):
+		if is_pp_on:
+			camera.environment = pp_off_env
+		else:
+			camera.environment = pp_on_env
+		is_pp_on = !is_pp_on
+	#######
 
 var _frames := 0
 func _physics_process(_delta):
@@ -44,6 +60,8 @@ func _physics_process(_delta):
 	
 	if is_dragging:
 		drag()
+	if _rotating_degree != 0:
+		rotate_obj()
 
 
 #######################
@@ -59,12 +77,13 @@ func cast_ray(event):
 	# casting ray
 	var cast = camera.get_world().direct_space_state.intersect_ray(
 		from,to,
-		# if we are currently dragging an object we dont want our cast to hit it
+		# if we are currently dragging an object,
+		## we dont want our cast to hit it
 		## we want our cast to hit things behind the object
 		[dragging] if is_dragging else [],
 		# in case the dragging objects collision mask is different
 		dragging.get_collision_mask() if is_dragging else 2147483647,
-		# we want to intersect with rigidbody and area both
+		# we want cast to intersect with both rigidbody and area
 		true,true
 		)
 	
@@ -74,7 +93,7 @@ func cast_ray(event):
 	## cast is mouse intersecting with ground 
 	## and cast is target position
 	##
-	## we need to assign it to current_cast to be able to move dragging object
+	## we need to asign it to current_cast to be able to move dragging object
 	current = cast
 	
 	# called **once** everytime there is a moving input 
@@ -91,23 +110,30 @@ func cast_ray(event):
 		if event.button_index == BUTTON_LEFT:
 			# if pressing mouse left button
 			if event.is_pressed():
-				# if cast is intersencting with something
-				# if current_cast is pointing to an object
-				if not current.empty():
-					# start moving
-					_drag_start(current)
+				# start moving
+				_drag_start(current)
 			# if released button
 			else:
 				# we dont need to check current_cast because we will stop
 				## dragging even if there is nothing in current_cast
-				
 				# stop moving
 				_drag_stop()
-
+	
+	if event is InputEventKey:
+		if event.is_action_pressed("rotate_obj"):
+			_rotating_degree = rotating_degree_default
+		elif event.is_action_pressed("_rotate_obj"):
+			_rotating_degree = -rotating_degree_default
+		elif event.is_action_released("rotate_obj"):
+			_rotating_degree = 0
+		elif event.is_action_released("_rotate_obj"):
+			_rotating_degree = 0
 
 
 # called from _physics_process every frame while is_dragging is true
 func drag():
+	# if cast is not intersencting with something
+	# if current_cast is not pointing to an object
 	# if there is nothing to drag then return
 	if current.empty(): return
 	# if dragging is not draggable      then return
@@ -151,12 +177,26 @@ func highlight(_cast):
 		#TODO clear highlight
 		get_node("../CanvasLayer/Label4").text = str(obj.name)
 
+# called from _physics_process every frame
+## while rotating_degree != 0
+func rotate_obj():
+	# if cast is not intersencting with something
+	if current.empty():return
+	
+	var obj = dragging if is_dragging else current['collider']
+	
+	# no need to make a new group called rotatable
+	if not obj.is_in_group("draggable"): return
+	
+	obj.rotation_degrees += Vector3(0,_rotating_degree,0)
+
 
 func _drag_start(_current):
 	is_dragging = true
 	dragging = _current['collider']
 	# debug
-	get_node("../CanvasLayer/Label3").text = "dragging:"+str(_current['collider'].name)
+	get_node("../CanvasLayer/Label3").text = \
+			"dragging:"+str(_current['collider'].name)
 	get_node("../CanvasLayer/Label").text =\
 			str(int(get_node("../CanvasLayer/Label").text)+1)
 

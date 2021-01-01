@@ -147,7 +147,9 @@ func _pan(delta: float) -> void:
 	# get mouse speed
 	var mouse_speed = _get_mouse_speed()
 	# transform to velocity
-	var velocity = (global_transform.basis.z * mouse_speed.y + global_transform.basis.x * mouse_speed.x) * delta * pan_speed
+	var velocity = (
+		global_transform.basis.z * mouse_speed.y + global_transform.basis.x * mouse_speed.x
+		)* delta * pan_speed
 	# translate
 	_translate_position(-velocity)
 

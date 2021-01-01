@@ -22,6 +22,22 @@ func _ready():
 #                                        #
 ##########################################
 
+# HOST
+func _on_hhost_pressed():
+	var net = NetworkedMultiplayerENet.new()
+	net.create_server(port, 8)
+	get_tree().set_network_peer(net)
+	# add myself to my list
+	List._add_player_to_list(get_tree().get_network_unique_id(),Name)
+	spawn_game()
+
+# JOIN
+func _on_jjoin_pressed():
+	var net = NetworkedMultiplayerENet.new()
+	net.create_client(ip, port)
+	get_tree().set_network_peer(net)
+
+
 func _connected_to_server():
 	print("connected to server")
 	List._add_player_to_list(get_tree().get_network_unique_id(),Name)
@@ -67,6 +83,11 @@ func spawn_game():
 #				get_node("../Table")._add_plo(id)
 
 
+##########################################
+#                                        #
+#                   UI                   #
+#                                        #
+##########################################
 
 ###PRIMER
 
@@ -104,20 +125,6 @@ func _on_cancel_pressed():
 
 
 
-###JOIN
-func _on_jjoin_pressed():
-	var net = NetworkedMultiplayerENet.new()
-	net.create_client(ip, port)
-	get_tree().set_network_peer(net)
-
-###HOST
-func _on_hhost_pressed():
-	var net = NetworkedMultiplayerENet.new()
-	net.create_server(port, 8)
-	get_tree().set_network_peer(net)
-	# add myself to my list
-	List._add_player_to_list(get_tree().get_network_unique_id(),Name)
-	spawn_game()
 
 
 

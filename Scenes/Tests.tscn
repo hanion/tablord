@@ -1,6 +1,7 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://Assets/dice.tres" type="Material" id=1]
+[ext_resource path="res://Assets/Table/dice.tres" type="Material" id=1]
+
 
 [sub_resource type="PhysicsMaterial" id=5]
 friction = 1000.0

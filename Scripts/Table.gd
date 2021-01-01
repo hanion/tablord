@@ -1,7 +1,7 @@
 extends Spatial
 
 var currently_moving := []
-
+#TODO rewrite all of the code
 
 #######################
 # OVERRIDE FUNCTIONS 
