@@ -128,12 +128,15 @@ func cast_ray(event):
 	if event is InputEventKey:
 		if event.is_action_pressed("rotate_obj"):
 			_rotating_degree = rotating_degree_default
-		elif event.is_action_pressed("_rotate_obj"):
-			_rotating_degree = -rotating_degree_default
 		elif event.is_action_released("rotate_obj"):
 			_rotating_degree = 0
+		elif event.is_action_pressed("_rotate_obj"):
+			_rotating_degree = -rotating_degree_default
 		elif event.is_action_released("_rotate_obj"):
 			_rotating_degree = 0
+		
+		if event.is_action_pressed("flip"):
+			flip_card()
 
 
 # called from _physics_process every frame while is_dragging is true
@@ -167,44 +170,20 @@ func drag():
 	# translating object to desired location
 	dragging.set_translation(trgt)
 	
-#	var old_y
-#	for visual in dragging.get_children():
-#		old_y = to_local(visual.rotation_degrees)
-	
-#	dragging.transform = dragging.transform.looking_at(
-
-#	dragging.rotate_object_local(
-#			Vector3.BACK,
-#			-dragging.get_child(0).rotation.z
-#			)
 	dragging.look_at(
 		(trgt+current['normal']*-1)*1,
 		#TODO check cards facing direction
 		Vector3.BACK*-1 # if card is facing_face == true?? else reversed
 		)
-#	for visual in dragging.get_children():
-#		visual.rotation_degrees.y = old_y.y
-	#TODO keep the local y 
-#	dragging.rotation_degrees = -dragging.get_parent().rotation_degrees
 	
-#	if old_y.length() > 1000:
-#		dragging.rotate_object_local(Vector3.BACK,old_y.y)
-	
-#	dragging.look_at(
-#		dragging.translation + trgt,
-#		Vector3.UP# if old_y > 0 else Vector3.FORWARD*(-1)
-#		)
-	
-
 
 
 
 func highlight(_cast):
 	# if cast isnt intersecting with anything, there is nothing to highlight
-	if _cast.empty():
-		return
-	
+	if _cast.empty():return
 	var obj = _cast['collider']
+	
 	if obj.is_in_group("highlight"):
 		#TODO highlight
 		get_node("../CanvasLayer/Label4").text = "*"+str(obj.name)+"*"
@@ -212,39 +191,51 @@ func highlight(_cast):
 		#TODO clear highlight
 		get_node("../CanvasLayer/Label4").text = str(obj.name)
 
+
 # called from _physics_process every frame
 ## while rotating_degree != 0
 func rotate_obj():
 	# if cast is not intersencting with something
 	if current.empty():return
-	
 	var obj = dragging if is_dragging else current['collider']
-	
 	# no need to make a new group called rotatable
 	if not obj.is_in_group("draggable"): return
 	
 	if rotating_sptepped:
 		var dir = _rotating_degree/abs(_rotating_degree)
-#		obj.rotate_object_local(
-#			Vector3.BACK,
-#			deg2rad(rotating_degree_stepped_default*dir)
-#			)
+		var amount = rotating_degree_stepped_default*dir
+		
 		for _obj in obj.get_children():
+			# take _obj to closest step
+			_obj.rotation_degrees.z = stepify(
+				_obj.rotation_degrees.z,
+				rotating_degree_stepped_default
+				)
+			# tick one step
 			_obj.rotate_object_local(
-			Vector3.BACK,
-			deg2rad(rotating_degree_stepped_default*dir)
-			)
+				Vector3.BACK,
+				deg2rad(amount)
+				)
 		# resetting currently used degree because we want to rotate once
 		_rotating_degree = 0
 	else:
-#		obj.rotate_object_local(
-#			Vector3.BACK,
-#			deg2rad(_rotating_degree)
-#			)
 		for _obj in obj.get_children():
 			_obj.rotate_object_local(
-			Vector3.BACK,
-			deg2rad(_rotating_degree)
+				Vector3.BACK,
+				deg2rad(_rotating_degree)
+				)
+
+
+func flip_card():
+	# if cast is not intersencting with something
+	if current.empty():return
+	var obj = dragging if is_dragging else current['collider']
+	if not obj.is_in_group("flippable"): return
+	#MAYBE animate it
+	for _obj in obj.get_children():
+		_obj.rotate_object_local(
+			Vector3.UP,
+			deg2rad(180)
 			)
 
 
