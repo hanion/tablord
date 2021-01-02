@@ -16,7 +16,9 @@ height = 0.4
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.50235 )
 script = ExtResource( 2 )
 ray_length = 100
+drag_offset = 0.01
 rotating_degree_default = 5.0
+rotating_sptepped = false
 
 [node name="CamController" type="Spatial" parent="."]
 script = ExtResource( 1 )

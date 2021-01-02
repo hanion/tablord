@@ -167,14 +167,25 @@ func drag():
 	# translating object to desired location
 	dragging.set_translation(trgt)
 	
-#	var old_y = to_local(dragging.rotation_degrees)
+#	var old_y
+#	for visual in dragging.get_children():
+#		old_y = to_local(visual.rotation_degrees)
 	
-	
-	dragging.transform = dragging.transform.looking_at(
+#	dragging.transform = dragging.transform.looking_at(
+
+#	dragging.rotate_object_local(
+#			Vector3.BACK,
+#			-dragging.get_child(0).rotation.z
+#			)
+	dragging.look_at(
 		(trgt+current['normal']*-1)*1,
-		Vector3.UP
+		#TODO check cards facing direction
+		Vector3.BACK*-1 # if card is facing_face == true?? else reversed
 		)
+#	for visual in dragging.get_children():
+#		visual.rotation_degrees.y = old_y.y
 	#TODO keep the local y 
+#	dragging.rotation_degrees = -dragging.get_parent().rotation_degrees
 	
 #	if old_y.length() > 1000:
 #		dragging.rotate_object_local(Vector3.BACK,old_y.y)
@@ -214,17 +225,28 @@ func rotate_obj():
 	
 	if rotating_sptepped:
 		var dir = _rotating_degree/abs(_rotating_degree)
-		obj.rotate_object_local(
+#		obj.rotate_object_local(
+#			Vector3.BACK,
+#			deg2rad(rotating_degree_stepped_default*dir)
+#			)
+		for _obj in obj.get_children():
+			_obj.rotate_object_local(
 			Vector3.BACK,
 			deg2rad(rotating_degree_stepped_default*dir)
 			)
 		# resetting currently used degree because we want to rotate once
 		_rotating_degree = 0
 	else:
-		obj.rotate_object_local(
+#		obj.rotate_object_local(
+#			Vector3.BACK,
+#			deg2rad(_rotating_degree)
+#			)
+		for _obj in obj.get_children():
+			_obj.rotate_object_local(
 			Vector3.BACK,
 			deg2rad(_rotating_degree)
 			)
+
 
 func _drag_start(_current):
 	is_dragging = true
