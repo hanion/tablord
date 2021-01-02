@@ -1,10 +1,11 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Table.gd" type="Script" id=2]
 [ext_resource path="res://Assets/Table/dice.tres" type="Material" id=3]
 [ext_resource path="res://Assets/Table/cards/card_mat.tres" type="Material" id=4]
 [ext_resource path="res://default_env.tres" type="Environment" id=5]
+[ext_resource path="res://example.tscn" type="PackedScene" id=6]
 
 [sub_resource type="GIProbeData" id=1]
 bounds = AABB( -41.6806, -12.2774, -39.123, 83.3612, 24.5548, 78.246 )
@@ -111,6 +112,24 @@ extents = Vector3( 0.4, 0.7, 0.05 )
 material = ExtResource( 4 )
 size = Vector3( 0.8, 1.4, 0.1 )
 
+[sub_resource type="CubeMesh" id=22]
+size = Vector3( 5, 1.5, 0.1 )
+
+[sub_resource type="SpatialMaterial" id=23]
+albedo_color = Color( 0.14902, 0.14902, 0.14902, 1 )
+
+[sub_resource type="BoxShape" id=24]
+extents = Vector3( 2.5, 0.75, 0.05 )
+
+[sub_resource type="CubeMesh" id=25]
+size = Vector3( 5, 0.1, 0.4 )
+
+[sub_resource type="SpatialMaterial" id=26]
+albedo_color = Color( 0.141176, 0.156863, 0.168627, 1 )
+
+[sub_resource type="BoxShape" id=27]
+extents = Vector3( 2.5, 0.05, 0.2 )
+
 [node name="Table" type="Spatial"]
 script = ExtResource( 2 )
 
@@ -145,10 +164,16 @@ material/0 = null
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="Control" parent="CanvasLayer" instance=ExtResource( 6 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
 [node name="Label" type="Label" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 text = "0"
+align = 2
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -156,8 +181,10 @@ __meta__ = {
 [node name="Label6" type="Label" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "
-pressed"
+text = "pressed
+"
+align = 2
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -167,6 +194,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 text = "cast"
 align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -174,9 +202,10 @@ __meta__ = {
 [node name="Label8" type="Label" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "
-cast"
+text = "cast
+"
 align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -184,8 +213,11 @@ __meta__ = {
 [node name="Label3" type="Label" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-text = "dragging"
-valign = 2
+margin_top = 50.0
+text = "
+
+dragging"
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -194,8 +226,7 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 text = "highlight"
-align = 2
-valign = 2
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -220,6 +251,7 @@ __meta__ = {
 }
 
 [node name="Tests" type="Spatial" parent="."]
+visible = false
 
 [node name="ball" type="RigidBody" parent="Tests" groups=[
 "draggable",
@@ -372,3 +404,51 @@ shape = SubResource( 16 )
 [node name="card" type="MeshInstance" parent="cards/areacard"]
 mesh = SubResource( 17 )
 material/0 = SubResource( 19 )
+
+[node name="ParentCard" type="Spatial" parent="cards"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="rigidcard3" type="RigidBody" parent="cards/ParentCard" groups=[
+"draggable",
+"highlight",
+]]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0.1, 0 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="cards/ParentCard/rigidcard3"]
+shape = SubResource( 20 )
+
+[node name="card" type="MeshInstance" parent="cards/ParentCard/rigidcard3"]
+mesh = SubResource( 21 )
+material/0 = null
+
+[node name="Deck" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0.636442, 3.70651 )
+
+[node name="KinematicBody" type="KinematicBody" parent="Deck"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25188, 0 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Deck/KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
+mesh = SubResource( 22 )
+material/0 = SubResource( 23 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Deck/KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
+shape = SubResource( 24 )
+
+[node name="KinematicBody2" type="KinematicBody" parent="Deck"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.502358, 4.76837e-07 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Deck/KinematicBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
+mesh = SubResource( 25 )
+material/0 = SubResource( 26 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Deck/KinematicBody2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
+shape = SubResource( 27 )
+
+[editable path="CanvasLayer/Control"]

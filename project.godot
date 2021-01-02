@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Draggable",
 "language": "GDScript",
 "path": "res://addons/DragDrop3D/Draggable.gd"
+}, {
+"base": "Panel",
+"class": "MonitorPlotPanel",
+"language": "GDScript",
+"path": "res://addons/PerfMonitor/MonitorPlotPanel.gd"
 } ]
 _global_script_class_icons={
-"Draggable": ""
+"Draggable": "",
+"MonitorPlotPanel": ""
 }
 
 [application]

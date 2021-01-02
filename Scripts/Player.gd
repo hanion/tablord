@@ -6,6 +6,9 @@ export(int) var ray_length = 0
 export(float,0,10) var drag_offset = 0.1
 # default step for _rotating_degree
 export(float,1,15) var rotating_degree_default := 5 # is angle
+export(bool) var rotating_sptepped := true # is bool
+export(float,1,90) var rotating_degree_stepped_default := 45 # is angle
+
 
 #######################
 # VARIABLES
@@ -43,6 +46,9 @@ func _input(event):
 		else:
 			camera.environment = pp_on_env
 		is_pp_on = !is_pp_on
+	if Input.is_action_just_pressed("move"):
+		if not current.empty():
+			roll_dice(current['collider'])
 	#######
 
 var _frames := 0
@@ -160,6 +166,24 @@ func drag():
 	)
 	# translating object to desired location
 	dragging.set_translation(trgt)
+	
+#	var old_y = to_local(dragging.rotation_degrees)
+	
+	
+	dragging.transform = dragging.transform.looking_at(
+		(trgt+current['normal']*-1)*1,
+		Vector3.UP
+		)
+	#TODO keep the local y 
+	
+#	if old_y.length() > 1000:
+#		dragging.rotate_object_local(Vector3.BACK,old_y.y)
+	
+#	dragging.look_at(
+#		dragging.translation + trgt,
+#		Vector3.UP# if old_y > 0 else Vector3.FORWARD*(-1)
+#		)
+	
 
 
 
@@ -188,8 +212,19 @@ func rotate_obj():
 	# no need to make a new group called rotatable
 	if not obj.is_in_group("draggable"): return
 	
-	obj.rotation_degrees += Vector3(0,_rotating_degree,0)
-
+	if rotating_sptepped:
+		var dir = _rotating_degree/abs(_rotating_degree)
+		obj.rotate_object_local(
+			Vector3.BACK,
+			deg2rad(rotating_degree_stepped_default*dir)
+			)
+		# resetting currently used degree because we want to rotate once
+		_rotating_degree = 0
+	else:
+		obj.rotate_object_local(
+			Vector3.BACK,
+			deg2rad(_rotating_degree)
+			)
 
 func _drag_start(_current):
 	is_dragging = true
