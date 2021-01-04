@@ -27,12 +27,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Tablord"
-run/main_scene="res://Scenes/Table.tscn"
+run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 List="*res://Scripts/list.gd"
+net="*res://Scenes/net.tscn"
 
 [display]
 

@@ -88,63 +88,63 @@ albedo_color = Color( 0.289062, 0.289062, 0.289062, 1 )
 [sub_resource type="BoxShape" id=15]
 extents = Vector3( 2.7, 0.025, 1.5 )
 
-[sub_resource type="CubeMesh" id=22]
+[sub_resource type="CubeMesh" id=16]
 size = Vector3( 5, 1.5, 0.1 )
 
-[sub_resource type="SpatialMaterial" id=23]
+[sub_resource type="SpatialMaterial" id=17]
 albedo_color = Color( 0.14902, 0.14902, 0.14902, 1 )
 
-[sub_resource type="BoxShape" id=24]
+[sub_resource type="BoxShape" id=18]
 extents = Vector3( 2.5, 0.75, 0.05 )
 
-[sub_resource type="CubeMesh" id=25]
+[sub_resource type="CubeMesh" id=19]
 size = Vector3( 5, 0.1, 0.4 )
 
-[sub_resource type="SpatialMaterial" id=26]
+[sub_resource type="SpatialMaterial" id=20]
 albedo_color = Color( 0.141176, 0.156863, 0.168627, 1 )
 
-[sub_resource type="BoxShape" id=27]
+[sub_resource type="BoxShape" id=21]
 extents = Vector3( 2.5, 0.05, 0.2 )
 
-[sub_resource type="CubeMesh" id=28]
+[sub_resource type="CubeMesh" id=22]
 size = Vector3( 5, 1.5, 0.025 )
 
-[sub_resource type="SpatialMaterial" id=29]
+[sub_resource type="SpatialMaterial" id=23]
 albedo_color = Color( 0.180392, 0.168627, 0.192157, 1 )
 
-[sub_resource type="BoxShape" id=30]
+[sub_resource type="BoxShape" id=24]
 extents = Vector3( 2.5, 0.75, 0.012 )
 
-[sub_resource type="PlaneMesh" id=31]
+[sub_resource type="PlaneMesh" id=25]
 size = Vector2( 5, 1.5 )
 
-[sub_resource type="CubeMesh" id=32]
+[sub_resource type="CubeMesh" id=26]
 size = Vector3( 5, 0.025, 0.4 )
 
-[sub_resource type="BoxShape" id=33]
+[sub_resource type="BoxShape" id=27]
 extents = Vector3( 2.5, 0.012, 0.2 )
 
-[sub_resource type="BoxShape" id=16]
+[sub_resource type="BoxShape" id=28]
 extents = Vector3( 0.4, 0.7, 0.05 )
 
-[sub_resource type="CubeMesh" id=17]
+[sub_resource type="CubeMesh" id=29]
 material = ExtResource( 4 )
 size = Vector3( 0.8, 1.4, 0.1 )
 
-[sub_resource type="StreamTexture" id=18]
+[sub_resource type="StreamTexture" id=30]
 flags = 19
 load_path = "res://.import/diceA.png-f4df9938011d0d97e6d0254c58a70cff.stex"
 
-[sub_resource type="SpatialMaterial" id=19]
+[sub_resource type="SpatialMaterial" id=31]
 vertex_color_use_as_albedo = true
 albedo_color = Color( 0.439216, 0.439216, 0.439216, 1 )
-albedo_texture = SubResource( 18 )
+albedo_texture = SubResource( 30 )
 metallic = 0.36
 
-[sub_resource type="BoxShape" id=20]
+[sub_resource type="BoxShape" id=32]
 extents = Vector3( 0.4, 0.7, 0.012 )
 
-[sub_resource type="CubeMesh" id=21]
+[sub_resource type="CubeMesh" id=33]
 material = ExtResource( 4 )
 size = Vector3( 0.8, 1.4, 0.025 )
 
@@ -383,12 +383,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25188, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 22 )
-material/0 = SubResource( 23 )
+mesh = SubResource( 16 )
+material/0 = SubResource( 17 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 24 )
+shape = SubResource( 18 )
 
 [node name="KinematicBody2" type="KinematicBody" parent="decks/Deck"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.502358, 4.76837e-07 )
@@ -396,12 +396,12 @@ input_ray_pickable = false
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 25 )
-material/0 = SubResource( 26 )
+mesh = SubResource( 19 )
+material/0 = SubResource( 20 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 27 )
+shape = SubResource( 21 )
 
 [node name="Deck2" type="Spatial" parent="decks"]
 transform = Transform( -4.37114e-08, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 2.98023e-08, -2.98023e-08, 3.70651, 0.636442, -2.38419e-07 )
@@ -411,12 +411,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25188, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck2/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 22 )
-material/0 = SubResource( 23 )
+mesh = SubResource( 16 )
+material/0 = SubResource( 17 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck2/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 24 )
+shape = SubResource( 18 )
 
 [node name="KinematicBody2" type="KinematicBody" parent="decks/Deck2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.502358, 4.76837e-07 )
@@ -424,12 +424,12 @@ input_ray_pickable = false
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck2/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 25 )
-material/0 = SubResource( 26 )
+mesh = SubResource( 19 )
+material/0 = SubResource( 20 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck2/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 27 )
+shape = SubResource( 21 )
 
 [node name="Deck3" type="Spatial" parent="decks"]
 transform = Transform( 0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, -4.95532, 0.636442, 1.53605 )
@@ -439,17 +439,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25188, 0 )
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck3/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 28 )
-material/0 = SubResource( 29 )
+mesh = SubResource( 22 )
+material/0 = SubResource( 23 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck3/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 30 )
+shape = SubResource( 24 )
 
 [node name="MeshInstance2" type="MeshInstance" parent="decks/Deck3/KinematicBody"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, -1.112, 0 )
 visible = false
-mesh = SubResource( 31 )
+mesh = SubResource( 25 )
 material/0 = null
 
 [node name="KinematicBody2" type="KinematicBody" parent="decks/Deck3"]
@@ -458,12 +458,12 @@ input_ray_pickable = false
 
 [node name="MeshInstance" type="MeshInstance" parent="decks/Deck3/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.11233, 0 )
-mesh = SubResource( 32 )
-material/0 = SubResource( 29 )
+mesh = SubResource( 26 )
+material/0 = SubResource( 23 )
 
 [node name="CollisionShape" type="CollisionShape" parent="decks/Deck3/KinematicBody2"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13328, 0 )
-shape = SubResource( 33 )
+shape = SubResource( 27 )
 
 [node name="cards" type="Spatial" parent="."]
 
@@ -478,11 +478,11 @@ __meta__ = {
 }
 
 [node name="CollisionShape" type="CollisionShape" parent="cards/rigidcard"]
-shape = SubResource( 16 )
+shape = SubResource( 28 )
 
 [node name="card" type="MeshInstance" parent="cards/rigidcard"]
-mesh = SubResource( 17 )
-material/0 = SubResource( 19 )
+mesh = SubResource( 29 )
+material/0 = SubResource( 31 )
 
 [node name="rigidcard2" type="RigidBody" parent="cards" groups=[
 "draggable",
@@ -495,10 +495,10 @@ __meta__ = {
 }
 
 [node name="CollisionShape" type="CollisionShape" parent="cards/rigidcard2"]
-shape = SubResource( 20 )
+shape = SubResource( 32 )
 
 [node name="card" type="MeshInstance" parent="cards/rigidcard2"]
-mesh = SubResource( 21 )
+mesh = SubResource( 33 )
 material/0 = null
 
 [node name="areacard" type="Area" parent="cards" groups=[
@@ -511,11 +511,11 @@ __meta__ = {
 }
 
 [node name="CollisionShape" type="CollisionShape" parent="cards/areacard"]
-shape = SubResource( 16 )
+shape = SubResource( 28 )
 
 [node name="card" type="MeshInstance" parent="cards/areacard"]
-mesh = SubResource( 17 )
-material/0 = SubResource( 19 )
+mesh = SubResource( 29 )
+material/0 = SubResource( 31 )
 
 [node name="rigidcard3" type="RigidBody" parent="cards" groups=[
 "draggable",
@@ -530,11 +530,13 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="cards/rigidcard3"]
 transform = Transform( 1, 0, 0, 0, 1, 1.42109e-14, 0, 5.68434e-14, 1, 0, 1.77636e-15, -7.45058e-09 )
-shape = SubResource( 20 )
+shape = SubResource( 32 )
 
 [node name="card" type="MeshInstance" parent="cards/rigidcard3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 4.26326e-14, 1, 0, 3.55271e-15, -1.49012e-08 )
-mesh = SubResource( 21 )
+mesh = SubResource( 33 )
 material/0 = null
+
+[node name="OtherPlayers" type="Spatial" parent="."]
 
 [editable path="CanvasLayer/Control"]

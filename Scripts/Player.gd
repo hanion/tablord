@@ -20,9 +20,7 @@ var dragging = null # is node
 var is_dragging := false # is state
 var _rotating_degree := 0 # is angle
 
-onready var parent = get_parent()
 onready var camera = $CamController/Elevation/Camera
-onready var orr = $CamController/origin
 
 var is_pp_on = false
 var pp_off_env = preload("res://default_env.tres")
@@ -51,18 +49,7 @@ func _input(event):
 			roll_dice(current['collider'])
 	#######
 
-var _frames := 0
 func _physics_process(_delta):
-	#TODO old code, change it 
-	## bkz:Trello Fix camera
-	if get_tree().has_network_peer():
-		_frames += 1
-		if _frames%3 == 0:
-			parent.my_pos(
-			camera.global_transform.origin,
-			orr.global_transform.origin
-			)
-		_frames = 0
 	
 	if is_dragging:
 		drag()

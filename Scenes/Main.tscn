@@ -143,7 +143,7 @@ size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
 text = "127.0.0.1"
 align = 1
-max_length = 12
+max_length = 25
 placeholder_text = "IP Address"
 
 [node name="port" type="LineEdit" parent="online_margin/join/VBox"]
@@ -153,9 +153,9 @@ margin_bottom = 270.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
-text = "6969"
+text = "4014"
 align = 1
-max_length = 12
+max_length = 5
 placeholder_text = "Port"
 
 [node name="HBox" type="HBoxContainer" parent="online_margin/join"]
@@ -213,7 +213,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
 align = 1
-max_length = 12
+max_length = 45
 editable = false
 placeholder_text = "IP Address"
 
@@ -224,9 +224,9 @@ margin_bottom = 270.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
-text = "6969"
+text = "4014"
 align = 1
-max_length = 12
+max_length = 5
 placeholder_text = "Port"
 
 [node name="HBox" type="HBoxContainer" parent="online_margin/host"]

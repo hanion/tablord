@@ -50,12 +50,14 @@ const RAY_LENGTH = 1000
 const GROUND_PLANE = Plane(Vector3.UP, 0)
 var _last_mouse_position = Vector2()
 
-
+# state
+var cam_state
 
 
 ########################
 # OVERRIDE FUNCTIONS
 ########################
+var _frames := 0
 
 func _process(delta: float) -> void:
 	if _lock_movement:
@@ -64,6 +66,14 @@ func _process(delta: float) -> void:
 	_rotate_and_elevate(delta)
 	_zoom(delta)
 	_pan(delta)
+	
+	#TODO old code, change it 
+	## bkz:Trello Fix camera
+	if get_tree().has_network_peer():
+		_frames += 1
+		if _frames%3 == 0:
+			DefineCamState()
+			_frames = 0
 
 
 func _input(event: InputEvent) -> void:
@@ -218,3 +228,18 @@ func _freeze_camera() -> void:
 	_lock_movement = true
 
 
+
+##############################
+# NETWORKING
+##############################
+func DefineCamState():
+	#TODO dont send positions, send rotation elevation zoom instead
+	#TODO dont send every time, check if its changed
+	#MAYBE make bool is_moving and disable it when not moving check here
+	var rot = rotation_degrees.y
+	var elevat = elevation.rotation_degrees.x
+	var zoom = camera.translation.z
+	var _P_ = Vector3(rot,elevat,zoom)
+	var or_pos = to_global($origin.transform.origin)
+	cam_state = {"T":OS.get_system_time_msecs(),"P":_P_,"PO":or_pos}
+	net.send_cam_state(cam_state)

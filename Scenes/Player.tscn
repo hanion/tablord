@@ -13,11 +13,9 @@ radius = 0.2
 height = 0.4
 
 [node name="Player" type="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.50235 )
 script = ExtResource( 2 )
 ray_length = 100
 drag_offset = 0.01
-rotating_degree_default = 5.0
 rotating_degree_stepped_default = 15.0
 
 [node name="CamController" type="Spatial" parent="."]
