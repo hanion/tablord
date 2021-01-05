@@ -6,6 +6,9 @@ func _ready():
 	rpc_config("receive_cam_state",MultiplayerAPI.RPC_MODE_MASTERSYNC)
 	rpc_config("receive_world_state",MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	
+	rpc_config("receive_obj_transform",MultiplayerAPI.RPC_MODE_MASTERSYNC)
+	rpc_config("receive_obj_transform_client",MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	
 #######################
 # CONNECTIONS
 #######################
@@ -22,8 +25,15 @@ func join_server(var ip := "127.0.0.1",var port := 4014):
 # INTERFACE
 #######################
 func send_cam_state(var cam_state):
+	# if player is alone
+	# diabled for testing the amount of bytes send
+#	if List.players[0].size() == 1: return
+	
 	rpc_unreliable_id(1,"receive_cam_state",cam_state)
 
+# change to state later
+func send_obj_transform(var path: String, var trans: Vector3):
+	rpc_unreliable_id(1,"receive_obj_transform",path,trans)
 
 
 
@@ -62,6 +72,12 @@ remote func receive_cam_state(var cam_state):
 	else:
 		cam_state_collection[player_id] = cam_state
 
+########
+remote func receive_obj_transform(path,trans):
+	rpc_unreliable_id(0,"receive_obj_transform_client",path,trans)
+remote func receive_obj_transform_client(path,trans):
+	get_node(path).translation = trans
+########
 
 func send_world_state(world_state):
 	rpc_unreliable("receive_world_state",world_state)

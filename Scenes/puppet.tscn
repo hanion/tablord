@@ -1,36 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=3 format=2]
 
-[sub_resource type="SpatialMaterial" id=1]
-flags_transparent = true
-albedo_color = Color( 0.231373, 0.988235, 0.0196078, 0.188235 )
+[ext_resource path="res://Assets/Table/cam_trans_green.tres" type="Material" id=1]
 
-[sub_resource type="SphereMesh" id=2]
-material = SubResource( 1 )
-radius = 0.8
-height = 1.6
-radial_segments = 32
-
-[sub_resource type="SpatialMaterial" id=3]
-flags_transparent = true
-albedo_color = Color( 0.133333, 0.294118, 0, 0.47451 )
-
-[sub_resource type="SphereMesh" id=4]
-material = SubResource( 3 )
-radius = 0.2
-height = 0.4
+[sub_resource type="CubeMesh" id=1]
+material = ExtResource( 1 )
+size = Vector3( 0.5, 0.5, 2 )
 
 [node name="puppet" type="Spatial"]
 
-[node name="Elevation" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+[node name="Cam" type="Spatial" parent="."]
 
-[node name="Camera" type="MeshInstance" parent="Elevation"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10 )
-mesh = SubResource( 2 )
+[node name="Mesh" type="MeshInstance" parent="Cam"]
+mesh = SubResource( 1 )
 material/0 = null
 
 [node name="Tween" type="Tween" parent="."]
-
-[node name="origin" type="MeshInstance" parent="."]
-mesh = SubResource( 4 )
-material/0 = null

@@ -157,6 +157,10 @@ func drag():
 	# translating object to desired location
 	dragging.set_translation(trgt)
 	
+	# send loc
+	net.send_obj_transform(dragging.get_path(),trgt)####TEST####
+	
+	# maybe no need to do this because table is flat
 	dragging.look_at(
 		(trgt+current['normal']*-1)*1,
 		#TODO check cards facing direction

@@ -5,8 +5,8 @@ var world_state = {}
 var _frames := 0
 func _physics_process(_delta):
 	if get_parent().cam_state_collection.empty(): return
+	if not get_tree().has_network_peer(): return
 	
-#	if get_tree().has_network_peer():
 	if true:
 		# if we are not the host, delete processor
 		if not get_tree().is_network_server():

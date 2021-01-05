@@ -10,7 +10,6 @@ var last_world_state = 0
 func _ready():
 	if not get_tree().has_network_peer():
 		set_physics_process(false)
-	rpc_config("_my_pos",MultiplayerAPI.RPC_MODE_REMOTE)
 	
 	for p in List.players[0]:
 		_add_plo(p)
@@ -41,18 +40,21 @@ func process_received_world_state(world_state):
 		for player in world_state.keys():
 			if get_node("OtherPlayers").has_node(str(player)):
 				move_player(
-					player,world_state[player]["P"])
+					player,world_state[player]["O"],
+					world_state[player]["R"])
 			else:
 				#MAYBE spawn player
 				printerr("Player doesn't exist in scene")
 
 
-func move_player(player,_P):
+func move_player(player,trans_origin,rotation):
 	var _puppet = get_node("OtherPlayers/"+str(player))
-	_puppet.rotation_degrees.y = _P.x
-	_puppet.get_node("Elevation").rotation_degrees.x = _P.y
-	_puppet.get_node("Elevation/Camera").translation.z = _P.z
+	var _cam = _puppet.get_node("Cam")
 	
+	_cam.rotation_degrees.x = rotation.x
+	_cam.rotation_degrees.y = rotation.y
+	
+	_cam.transform.origin = trans_origin
 
 
 

@@ -30,7 +30,7 @@ inverted_y = true
 transform = Transform( 1, 0, 0, 0, 0.716302, 0.697791, 0, -0.697791, 0.716302, 0, 0, 0 )
 
 [node name="Camera" type="Camera" parent="CamController/Elevation"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13 )
 
 [node name="Tween" type="Tween" parent="CamController"]
 
