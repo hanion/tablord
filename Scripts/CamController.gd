@@ -67,13 +67,14 @@ func _process(delta: float) -> void:
 	_zoom(delta)
 	_pan(delta)
 	
-	#TODO old code, change it 
-	## bkz:Trello Fix camera
 	if get_tree().has_network_peer():
-		_frames += 1
-		if _frames%3 == 0:
-			DefineCamState()
-			_frames = 0
+		DefineCamState()
+		#TODO default is true, send it every 3 frames and smoothen it by lerp
+		#MAYBE add an option for less band useage
+#		_frames += 1 # This is frame controller 
+#		if _frames%3 == 0:
+#			DefineCamState()
+#			_frames = 0
 
 
 func _input(event: InputEvent) -> void:
@@ -232,22 +233,28 @@ func _freeze_camera() -> void:
 ##############################
 # NETWORKING
 ##############################
+var last_trans = Vector3(0,0,0)
+# CAM elevation,rot_y,zoom
+var last_CAM = Vector3(45,0,13)
 func DefineCamState():
-	#TODO dont send positions, send rotation elevation zoom instead
-	#TODO dont send every time, check if its changed
 	#MAYBE make bool is_moving and disable it when not moving check here
 	
-#	var rot = rotation_degrees.y
-#	var elevat = elevation.rotation_degrees.x
-#	var zoom = camera.translation.z
-#	var _P_ = Vector3(rot,elevat,zoom)
-#	var or_pos = to_global($origin.transform.origin)
-#	var _POS_ = Vector2(or_pos.x,or_pos.z)
 	
-	var origin_trans = to_global(get_node("Elevation/Camera").transform.origin)
+	var origin_trans = transform.origin #to_global(transform.origin)
 	var elev = get_node("Elevation").rotation_degrees.x
 	var rot_y = rotation_degrees.y
-	var rotation = Vector2(elev,rot_y)
+	var _zoom = get_node("Elevation/Camera").translation.z
 	
-	cam_state = {"T":OS.get_system_time_msecs(),"O":origin_trans,"R":rotation}
+	var CAM = Vector3(elev,rot_y,_zoom)
+	get_node("../../CanvasLayer/O").text = str(origin_trans)+" :O"
+	get_node("../../CanvasLayer/CAM").text = "\n\n"+str(CAM)+" :CAM"
+	
+	# if nothing changed then dont send anything
+	if last_trans == origin_trans and last_CAM == CAM:
+		return
+	
+	cam_state = {"T":OS.get_system_time_msecs(),"O":origin_trans,"C":CAM}
 	net.send_cam_state(cam_state)
+	
+	last_trans = origin_trans
+	last_CAM = CAM

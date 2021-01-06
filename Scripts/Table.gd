@@ -41,20 +41,23 @@ func process_received_world_state(world_state):
 			if get_node("OtherPlayers").has_node(str(player)):
 				move_player(
 					player,world_state[player]["O"],
-					world_state[player]["R"])
+					world_state[player]["C"])
 			else:
 				#MAYBE spawn player
 				printerr("Player doesn't exist in scene")
 
 
-func move_player(player,trans_origin,rotation):
-	var _puppet = get_node("OtherPlayers/"+str(player))
-	var _cam = _puppet.get_node("Cam")
+func move_player(player,trans_origin,CAM):
+	var _cam_controller = get_node("OtherPlayers/"+str(player)+"/CamController")
+	var _elevation = _cam_controller.get_node("Elevation")
+	var _cam = _elevation.get_node("Camera")
 	
-	_cam.rotation_degrees.x = rotation.x
-	_cam.rotation_degrees.y = rotation.y
+	_cam_controller.transform.origin = trans_origin
+	 
+	_elevation.rotation_degrees.x = CAM.x
+	_cam_controller.rotation_degrees.y = CAM.y
+	_cam.translation.z = CAM.z
 	
-	_cam.transform.origin = trans_origin
 
 
 

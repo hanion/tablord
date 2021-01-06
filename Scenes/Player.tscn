@@ -21,9 +21,11 @@ rotating_degree_stepped_default = 15.0
 [node name="CamController" type="Spatial" parent="."]
 script = ExtResource( 1 )
 movement_speed = 10.0
-min_zoom = 0.0
+min_zoom = 1.0
 max_zoom = 84.5
-rotation_speed = -20.0
+zoom_speed = 10.0
+max_elevation_angle = 89
+rotation_speed = -10.0
 inverted_y = true
 
 [node name="Elevation" type="Spatial" parent="CamController"]

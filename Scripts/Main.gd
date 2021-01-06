@@ -10,6 +10,7 @@ var Name = ""
 
 
 func _ready():
+	get_node("online_margin/primer/name").grab_focus()
 	net.rpc_config("new_peer_connected",MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	var _c=get_tree().connect("network_peer_connected", self,"_player_connected")
 	var _d=get_tree().connect("network_peer_disconnected", self,"_player_disconnected")
