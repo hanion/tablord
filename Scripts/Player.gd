@@ -158,7 +158,7 @@ func drag():
 	dragging.set_translation(trgt)
 	
 	# send loc
-	net.send_obj_transform(dragging.get_path(),trgt)####TEST####
+	define_obj_state(dragging)
 	
 	# maybe no need to do this because table is flat
 	dragging.look_at(
@@ -267,6 +267,30 @@ func roll_dice(var obj):
 		
 		obj.apply_torque_impulse(Vector3.RIGHT*-4)
 		obj.apply_torque_impulse(Vector3.BACK*-4)
+
+
+
+func define_obj_state(obj):
+	var obj_path_short = obj.name
+	
+	var state = {
+		0:{
+			"T":OS.get_system_time_msecs(),
+			
+			obj_path_short:{
+				"O": obj.transform.origin,
+				"R": obj.rotation_degrees
+			}
+			
+		}
+		
+	}
+	
+	net.send_state(state)
+
+
+
+
 
 
 

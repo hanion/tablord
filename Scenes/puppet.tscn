@@ -2,9 +2,9 @@
 
 [ext_resource path="res://Assets/Table/cam_trans_green.tres" type="Material" id=1]
 
-[sub_resource type="PrismMesh" id=2]
+[sub_resource type="PrismMesh" id=1]
 
-[sub_resource type="SphereMesh" id=1]
+[sub_resource type="SphereMesh" id=2]
 radius = 0.2
 height = 0.4
 
@@ -17,11 +17,11 @@ transform = Transform( 1, 0, 0, 0, 0.716302, 0.697791, 0, -0.697791, 0.716302, 0
 
 [node name="Camera" type="MeshInstance" parent="CamController/Elevation"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 13 )
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 material/0 = ExtResource( 1 )
 
 [node name="Tween" type="Tween" parent="CamController"]
 
 [node name="origin" type="MeshInstance" parent="CamController"]
-mesh = SubResource( 1 )
+mesh = SubResource( 2 )
 material/0 = ExtResource( 1 )

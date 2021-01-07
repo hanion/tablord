@@ -3,11 +3,8 @@ extends Node
 # CONFIG
 #######################
 func _ready():
-	rpc_config("receive_cam_state",MultiplayerAPI.RPC_MODE_MASTERSYNC)
+	rpc_config("receive_state",MultiplayerAPI.RPC_MODE_MASTERSYNC)
 	rpc_config("receive_world_state",MultiplayerAPI.RPC_MODE_REMOTESYNC)
-	
-	rpc_config("receive_obj_transform",MultiplayerAPI.RPC_MODE_MASTERSYNC)
-	rpc_config("receive_obj_transform_client",MultiplayerAPI.RPC_MODE_REMOTESYNC)
 	
 #######################
 # CONNECTIONS
@@ -24,19 +21,10 @@ func join_server(var ip := "127.0.0.1",var port := 4014):
 #######################
 # INTERFACE
 #######################
-func send_cam_state(var cam_state):
-	# if player is alone
-	# diabled for testing the amount of bytes send
-#	if List.players[0].size() == 1: return
+func send_state(state):
+	if List.players[0].size() == 1: return # if player is alone
 	
-	rpc_unreliable_id(1,"receive_cam_state",cam_state)
-
-# change to state later
-func send_obj_transform(var path: String, var trans: Vector3):
-	rpc_unreliable_id(1,"receive_obj_transform",path,trans)
-
-
-
+	rpc_unreliable_id(1,"receive_state",state)
 
 
 #######################
@@ -46,6 +34,7 @@ func send_obj_transform(var path: String, var trans: Vector3):
 ## from Main peer_connected
 # the peer who connected to us gives info to us
 remote func new_peer_connected(var Name,var _color := 1,var _shape := 1):
+	#TODO add colors
 	var id = get_tree().get_rpc_sender_id()
 	List._add_player_to_list(id,Name)
 	print("got the info, name is ",Name," and id is ",id)
@@ -54,6 +43,8 @@ remote func new_peer_connected(var Name,var _color := 1,var _shape := 1):
 	get_node("/root/Table")._add_plo(id)
 
 remote func receive_world_state(world_state):
+	if world_state.empty():
+		print("WTF ITS EMPTY RECEİVERERERER")
 	get_node("/root/Table").process_received_world_state(world_state)
 
 
@@ -61,25 +52,31 @@ remote func receive_world_state(world_state):
 #######################
 # HOST
 #######################
-var cam_state_collection := {}
+var world_state_collection := {}
 
 
-remote func receive_cam_state(var cam_state):
+remote func receive_state(state):
+	if state.has(0):
+		if world_state_collection.has(0):
+			if world_state_collection[0]["T"] < state[0]["T"]:
+				world_state_collection[0] = state[0]
+		else:
+			world_state_collection[0] = state[0]
+		return
+	
+	
 	var player_id = get_tree().get_rpc_sender_id()
-	if cam_state_collection.has(player_id):
-		if cam_state_collection[player_id]["T"] < cam_state["T"]:
-			cam_state_collection[player_id] = cam_state
+	if world_state_collection.has(player_id):
+		if world_state_collection[player_id]["T"] < state["T"]:
+			world_state_collection[player_id] = state
 	else:
-		cam_state_collection[player_id] = cam_state
+		world_state_collection[player_id] = state
+	
 
-########
-remote func receive_obj_transform(path,trans):
-	rpc_unreliable_id(0,"receive_obj_transform_client",path,trans)
-remote func receive_obj_transform_client(path,trans):
-	get_node(path).translation = trans
-########
 
 func send_world_state(world_state):
+	if world_state.empty():
+		print("WTF ITS EMPTYSEND WORLD STATETA")
 	rpc_unreliable("receive_world_state",world_state)
 
 
