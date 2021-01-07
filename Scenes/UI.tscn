@@ -1,0 +1,361 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Themes/UI.tres" type="Theme" id=1]
+[ext_resource path="res://Themes/fonts/NotoSans/NotoSansUI-Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Themes/fonts/NotoSans/NotoSansUI_Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/UI/Search.svg" type="Texture" id=4]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
+expand_margin_top = 25.0
+shadow_color = Color( 0, 0, 0, 0.329412 )
+shadow_size = 2
+
+[sub_resource type="DynamicFont" id=2]
+use_filter = true
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 15.0
+content_margin_right = 15.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.113725, 0.113725, 0.113725, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+expand_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 15.0
+content_margin_right = 15.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
+expand_margin_bottom = 1.0
+
+[sub_resource type="DynamicFont" id=5]
+size = 14
+use_filter = true
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxEmpty" id=6]
+
+[sub_resource type="StyleBoxFlat" id=7]
+bg_color = Color( 0.101961, 0.101961, 0.101961, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0.0627451, 0.0627451, 0.0627451, 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0.121569, 0.121569, 0.121569, 1 )
+border_width_bottom = 1
+border_color = Color( 0.0784314, 0.0784314, 0.0784314, 1 )
+
+[node name="UI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.80862
+margin_right = 0.00012207
+margin_bottom = -1.80853
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WindowDialog" type="WindowDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 6.0
+margin_top = 31.0
+margin_right = -9.0
+margin_bottom = -6.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 1 )
+custom_fonts/title_font = SubResource( 2 )
+custom_constants/title_height = 25
+window_title = "Settings"
+resizable = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 35.0
+margin_right = -10.0
+margin_bottom = -10.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/tab_fg = SubResource( 3 )
+custom_styles/tab_bg = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+tab_align = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Controls" type="Panel" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="VSplit" type="VSplitContainer" parent="TabContainer/Controls"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+collapsed = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Search" type="LineEdit" parent="TabContainer/Controls/VSplit"]
+margin_right = 1336.0
+margin_bottom = 28.0
+size_flags_horizontal = 3
+right_icon = ExtResource( 4 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Controls/VSplit"]
+margin_top = 36.0
+margin_right = 1336.0
+margin_bottom = 683.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/bg = SubResource( 7 )
+scroll_horizontal_enabled = false
+
+[node name="VBox" type="VBoxContainer" parent="TabContainer/Controls/VSplit/ScrollContainer"]
+margin_left = 1.0
+margin_top = 1.0
+margin_right = 1335.0
+margin_bottom = 646.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox"]
+margin_right = 1334.0
+margin_bottom = 28.0
+custom_colors/font_color = Color( 0.703125, 0.703125, 0.703125, 1 )
+text = "Camera  Movements"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox"]
+margin_top = 32.0
+margin_right = 1334.0
+margin_bottom = 36.0
+custom_constants/separation = 4
+
+[node name="HBox" type="HBoxContainer" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox"]
+margin_top = 40.0
+margin_right = 1334.0
+margin_bottom = 645.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBox" type="VBoxContainer" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox"]
+margin_right = 665.0
+margin_bottom = 605.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox"]
+margin_right = 665.0
+margin_bottom = 28.0
+custom_styles/normal = SubResource( 8 )
+text = "Move Forwards"
+
+[node name="Label2" type="Label" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox"]
+margin_top = 32.0
+margin_right = 665.0
+margin_bottom = 60.0
+custom_styles/normal = SubResource( 8 )
+text = "Move Backwards"
+
+[node name="Label3" type="Label" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox"]
+margin_top = 64.0
+margin_right = 665.0
+margin_bottom = 92.0
+custom_styles/normal = SubResource( 8 )
+text = "Move Right"
+
+[node name="Label4" type="Label" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox"]
+margin_top = 96.0
+margin_right = 665.0
+margin_bottom = 124.0
+custom_styles/normal = SubResource( 8 )
+text = "Move Left"
+
+[node name="VBox2" type="VBoxContainer" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox"]
+margin_left = 669.0
+margin_right = 1334.0
+margin_bottom = 605.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox2"]
+margin_right = 665.0
+margin_bottom = 28.0
+text = "W"
+
+[node name="Button2" type="Button" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox2"]
+margin_top = 32.0
+margin_right = 665.0
+margin_bottom = 60.0
+text = "S"
+
+[node name="Button3" type="Button" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox2"]
+margin_top = 64.0
+margin_right = 665.0
+margin_bottom = 92.0
+text = "A"
+
+[node name="Button4" type="Button" parent="TabContainer/Controls/VSplit/ScrollContainer/VBox/HBox/VBox2"]
+margin_top = 96.0
+margin_right = 665.0
+margin_bottom = 124.0
+text = "D"
+
+[node name="General" type="Panel" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/General"]
+anchor_right = 1.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+right_icon = ExtResource( 4 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Network" type="Panel" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Network"]
+anchor_right = 1.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+right_icon = ExtResource( 4 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OptionButton" type="OptionButton" parent="TabContainer/Network"]
+anchor_right = 0.405
+anchor_bottom = 0.548
+margin_left = 126.0
+margin_top = 294.0
+margin_right = -0.0800171
+margin_bottom = -0.284027
+text = "Item 0"
+items = [ "Item 0", null, false, 0, null, "Item 1", null, false, 1, null, "Item 2", null, false, 2, null ]
+selected = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SpinBox" type="SpinBox" parent="TabContainer/Network"]
+anchor_right = 0.405
+anchor_bottom = 0.428
+margin_left = 126.0
+margin_top = 236.0
+margin_right = -0.0800171
+margin_bottom = -0.324036
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="slider" type="HSlider" parent="TabContainer/Network"]
+anchor_right = 0.405
+anchor_bottom = 0.428
+margin_left = 126.0
+margin_top = 154.827
+margin_right = -0.0800171
+margin_bottom = -81.4973
+max_value = 10.0
+
+[node name="Container" type="Container" parent="TabContainer/Network"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Video" type="Panel" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Video"]
+anchor_right = 1.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+right_icon = ExtResource( 4 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Audio" type="Panel" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 35.0
+margin_right = -5.0
+margin_bottom = -5.0
+custom_styles/panel = SubResource( 6 )
+
+[node name="LineEdit" type="LineEdit" parent="TabContainer/Audio"]
+anchor_right = 1.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+right_icon = ExtResource( 4 )
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

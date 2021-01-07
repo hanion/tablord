@@ -9,25 +9,19 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node",
-"class": "Draggable",
-"language": "GDScript",
-"path": "res://addons/DragDrop3D/Draggable.gd"
-}, {
 "base": "Panel",
 "class": "MonitorPlotPanel",
 "language": "GDScript",
 "path": "res://addons/PerfMonitor/MonitorPlotPanel.gd"
 } ]
 _global_script_class_icons={
-"Draggable": "",
 "MonitorPlotPanel": ""
 }
 
 [application]
 
 config/name="Tablord"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Scenes/UI.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -37,6 +31,8 @@ net="*res://Scenes/net.tscn"
 
 [display]
 
+window/size/width=1366
+window/size/height=768
 window/size/always_on_top=true
 window/size/test_width=512
 window/size/test_height=300
@@ -45,7 +41,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "Todo_Manager", "notes_tab", "zylann.project_stats" )
+enabled=PoolStringArray( "Todo_Manager", "godot-plugin-refresher", "notes_tab", "test_tab" )
 
 [input]
 
