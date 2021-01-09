@@ -242,6 +242,7 @@ func _drag_start(_current):
 
 func _drag_stop():
 	is_dragging = false
+	dragging = null
 	
 	# debug
 	get_node("../CanvasLayer/Label3").text = "not dragging"

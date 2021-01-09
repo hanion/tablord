@@ -22,7 +22,7 @@ func join_server(var ip := "127.0.0.1",var port := 4014):
 # INTERFACE
 #######################
 func send_state(state):
-	if List.players[0].size() == 1: return # if player is alone
+	if List.players.size() == 1: return # if player is alone
 	
 	rpc_unreliable_id(1,"receive_state",state)
 

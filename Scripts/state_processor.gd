@@ -2,6 +2,7 @@ extends Node
 
 var world_state = {}
 var last_world_state = {}
+export(int) var update_frame_time = 5
 
 var _frames := 0
 func _physics_process(_delta):
@@ -12,7 +13,7 @@ func _physics_process(_delta):
 	
 	
 	_frames += 1
-	if _frames%2 == 0:
+	if _frames%update_frame_time == 0:
 		process_state()
 		_frames = 0
 

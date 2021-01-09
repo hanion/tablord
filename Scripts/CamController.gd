@@ -250,10 +250,9 @@ func DefineCamState():
 	get_node("../../CanvasLayer/CAM").text = "\n\n"+str(CAM)+" :CAM"
 	
 	# if nothing changed then dont send anything
-#	print("\n\n",last_trans,origin_trans," , ",last_CAM,CAM,"\n.\n")
 	if last_trans == origin_trans and last_CAM == CAM:
 		return
-	print("apperently not same")
+	
 	cam_state = {	"T":OS.get_system_time_msecs(),
 					"O":origin_trans,
 					"C":CAM

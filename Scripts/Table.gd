@@ -3,6 +3,7 @@ extends Spatial
 var currently_moving := []
 var last_world_state = 0
 #TODO rewrite all of the code
+export(float,0.05,1.0) var tween_duration = 0.1
 
 #######################
 # OVERRIDE FUNCTIONS 
@@ -11,7 +12,7 @@ func _ready():
 	if not get_tree().has_network_peer():
 		set_physics_process(false)
 	
-	for p in List.players[0]:
+	for p in List.players:
 		_add_plo(p)
 
 #######################
@@ -25,6 +26,8 @@ func _add_plo(var id):
 	plo.set_name(str(id))
 	plo.set_network_master(id)
 #	plo.translation = Vector3(2,2,1)
+	var tag=plo.get_node("CamController/Elevation/Camera/nametag/Viewport/tag")
+	tag.text = List.players[id]
 	get_node("OtherPlayers").add_child(plo)
 
 
@@ -41,10 +44,8 @@ func process_received_world_state(world_state):
 	
 	# erase me, i dont want my own update
 	world_state.erase(get_tree().get_network_unique_id())
-	if not world_state.empty():
-		print("\n\nworld state came in ",last_world_state)
-		print(world_state)
-#		print("WTF ITS EMPTY in TABLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+	# if it was only me, return
+	if world_state.empty(): return
 	
 	for player in world_state.keys():
 		# 0 is objects
@@ -69,20 +70,73 @@ func move_player(player,trans_origin = Vector3(0,0,0),CAM = Vector3(0,0,0)):
 	var _cam = _elevation.get_node("Camera")
 	
 	if trans_origin != Vector3(0,0,0):
-		_cam_controller.transform.origin = trans_origin
+		$Tween.interpolate_property(
+				_cam_controller,
+				"translation",
+				_cam_controller.translation,
+				trans_origin,
+				tween_duration,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN_OUT
+		)
+		$Tween.start()
+#		_cam_controller.transform.origin = trans_origin
 	 
 	if CAM != Vector3(0,0,0):
-		_elevation.rotation_degrees.x = CAM.x
-		_cam_controller.rotation_degrees.y = CAM.y
-		_cam.translation.z = CAM.z
+		$Tween.interpolate_property(
+				_elevation,
+				"rotation_degrees",
+				_elevation.rotation_degrees,
+				Vector3(CAM.x,0,0),
+				tween_duration,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN_OUT
+			)
+		$Tween.interpolate_property(
+				_cam_controller,
+				"rotation_degrees",
+				_cam_controller.rotation_degrees,
+				Vector3(0,CAM.y,0),
+				tween_duration,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN_OUT
+			)
+		$Tween.interpolate_property(
+				_cam,
+				"translation",
+				_cam.translation,
+				Vector3(0,0,CAM.z),
+				tween_duration,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN_OUT
+			)
+		$Tween.start()
+#		_elevation.rotation_degrees.x = CAM.x
+#		_cam_controller.rotation_degrees.y = CAM.y
+#		_cam.translation.z = CAM.z
+
 
 func process_objects(opss):
 	# opss = object_path_short's
 	# ops = object_path_short
 	for ops in opss:
 		var _obj = get_node("Objects/cards/"+ops)
+		if $Player.dragging == _obj:
+			printerr("nope im dragging it")
+			return
+		
 		if opss[ops].has("O"):
-			_obj.transform.origin = opss[ops]["O"]
+			$Tween.interpolate_property(
+				_obj,
+				"translation",
+				_obj.transform.origin,
+				opss[ops]["O"],
+				tween_duration,
+				Tween.TRANS_LINEAR,
+				Tween.EASE_IN_OUT
+			)
+			$Tween.start()
+#			_obj.transform.origin = opss[ops]["O"]
 		if opss[ops].has("R"):
 			_obj.rotation_degrees = opss[ops]["R"]
 

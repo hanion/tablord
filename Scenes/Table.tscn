@@ -411,4 +411,6 @@ material/0 = ExtResource( 3 )
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 shape = SubResource( 15 )
 
+[node name="Tween" type="Tween" parent="."]
+
 [editable path="CanvasLayer/Control"]
