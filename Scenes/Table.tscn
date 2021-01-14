@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Table.gd" type="Script" id=2]
@@ -91,6 +91,9 @@ surfaces/0 = {
 
 [sub_resource type="BoxShape" id=15]
 extents = Vector3( 0.503829, 0.507111, 0.501987 )
+
+[sub_resource type="BoxShape" id=16]
+extents = Vector3( 0.252, 0.253, 0.251 )
 
 [node name="Table" type="Spatial"]
 script = ExtResource( 2 )
@@ -378,7 +381,7 @@ shape = SubResource( 12 )
 "dice",
 "draggable",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27483, 0.489587, 0.909435 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.12701, 0.37822, 0.652571 )
 physics_material_override = SubResource( 13 )
 __meta__ = {
 "_edit_group_": true
@@ -393,11 +396,29 @@ material/0 = ExtResource( 3 )
 transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 shape = SubResource( 15 )
 
+[node name="dice3" type="RigidBody" parent="Objects/cards" groups=[
+"dice",
+"draggable",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.27483, 0.489587, 0.909435 )
+physics_material_override = SubResource( 13 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="dice3" type="MeshInstance" parent="Objects/cards/dice3"]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.25, 0 )
+mesh = SubResource( 14 )
+material/0 = ExtResource( 3 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Objects/cards/dice3"]
+shape = SubResource( 16 )
+
 [node name="dice2" type="RigidBody" parent="Objects/cards" groups=[
 "dice",
 "draggable",
 ]]
-transform = Transform( 0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0, 1, 2 )
+transform = Transform( 0.707106, 0.707106, 0, -0.707106, 0.707106, 0, 0, 0, 1, 0, 1, 2 )
 __meta__ = {
 "_edit_group_": true
 }

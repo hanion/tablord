@@ -21,10 +21,16 @@ func join_server(var ip := "127.0.0.1",var port := 4014):
 #######################
 # INTERFACE
 #######################
+var _frames := 0
+onready var update_frame_time = $state_processor.update_frame_time
 func send_state(state):
+	if List.players.size() == 0: return # if im testing the game
 	if List.players.size() == 1: return # if player is alone
+	_frames += 1
+	if _frames%update_frame_time == 0:
+		rpc_unreliable_id(1,"receive_state",state)
+		_frames = 0
 	
-	rpc_unreliable_id(1,"receive_state",state)
 
 
 #######################
@@ -37,7 +43,7 @@ remote func new_peer_connected(var Name,var _color := 1,var _shape := 1):
 	#TODO add colors
 	var id = get_tree().get_rpc_sender_id()
 	List._add_player_to_list(id,Name)
-	print("got the info, name is ",Name," and id is ",id)
+	print(Name,":",id,",",_color,",",_shape)
 	
 	# spawn puppet node of the player connected 
 	get_node("/root/Table")._add_plo(id)

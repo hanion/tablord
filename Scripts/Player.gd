@@ -18,6 +18,7 @@ var current = null # is cast
 # object we are currently holding
 var dragging = null # is node
 var is_dragging := false # is state
+var _dragging_offset: Vector3
 var _rotating_degree := 0 # is angle
 
 onready var camera = $CamController/Elevation/Camera
@@ -60,7 +61,7 @@ func _physics_process(_delta):
 #######################
 # FUNCTIONS 
 #######################
-func cast_ray(event):
+func cast_ray(event,_is_test:=false):
 	# mouse position
 	var mouse = get_viewport().get_mouse_position()
 	# starting point of ray
@@ -88,6 +89,10 @@ func cast_ray(event):
 	##
 	## we need to asign it to current_cast to be able to move dragging object
 	current = cast
+	
+	if _is_test:
+		return current
+	
 	
 	# called **once** everytime there is a moving input 
 	## (not called when mouse is stationary)
@@ -146,20 +151,18 @@ func drag():
 		dragging.sleeping = false
 		dragging.linear_velocity = Vector3.ZERO
 	
+	
 	# target position of dragging object
-	var trgt = (
-		# position of mouse intersecting with something
-		current['position']
-		+ 
-		# giving it an offset
-		( current['normal'] * Vector3(0,drag_offset,0) )
-	)
+	# current['position'] = position of mouse intersecting with something
+	var trgt = (current['position'] + _dragging_offset)
+	
 	# translating object to desired location
 	dragging.set_translation(trgt)
 	
 	# send loc
 	define_obj_state(dragging)
-	
+	#FIXME remove lookat maybe
+	if true: return
 	# maybe no need to do this because table is flat
 	dragging.look_at(
 		(trgt+current['normal']*-1)*1,
@@ -231,8 +234,20 @@ func flip_card():
 
 
 func _drag_start(_current):
+	if not _current['collider'].is_in_group("draggable"): return
+	
 	is_dragging = true
+	
 	dragging = _current['collider']
+	
+	var event = InputEventMouseMotion.new()
+	var _second_ray = cast_ray(event,true)
+	
+	var off = _current['collider'].get_node("CollisionShape").shape.extents.z
+	var siz = _current['collider'].get_node("CollisionShape").scale.z
+	
+	_dragging_offset = (     Vector3(0,off*siz,0)     )
+	
 	# debug
 	get_node("../CanvasLayer/Label3").text = \
 			"dragging:"+str(_current['collider'].name)
@@ -257,8 +272,10 @@ func roll_dice(var obj):
 		obj.sleeping = false
 		obj.apply_central_impulse(Vector3.UP*10)
 		yield(get_tree().create_timer(0.2),"timeout")
+		
 		obj.apply_torque_impulse(Vector3.RIGHT*5)
 		obj.apply_torque_impulse(Vector3.BACK*5)
+		obj.apply_torque_impulse(Vector3.DOWN*5)
 		
 		var rng = RandomNumberGenerator.new()
 		rng.randomize()
@@ -268,6 +285,7 @@ func roll_dice(var obj):
 		
 		obj.apply_torque_impulse(Vector3.RIGHT*-4)
 		obj.apply_torque_impulse(Vector3.BACK*-4)
+		obj.apply_torque_impulse(Vector3.DOWN*-4)
 
 
 

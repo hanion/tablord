@@ -44,6 +44,11 @@ func process_received_world_state(world_state):
 	
 	# erase me, i dont want my own update
 	world_state.erase(get_tree().get_network_unique_id())
+	if $Player.is_dragging and $Player.dragging != null:
+		if world_state.has(0):
+			if world_state[0].has($Player.dragging.name):
+				world_state[0].erase($Player.dragging.name)
+	
 	# if it was only me, return
 	if world_state.empty(): return
 	
@@ -122,7 +127,7 @@ func process_objects(opss):
 	for ops in opss:
 		var _obj = get_node("Objects/cards/"+ops)
 		if $Player.dragging == _obj:
-			printerr("nope im dragging it")
+			printerr("We should have deleted it on line 40-50")
 			return
 		
 		if opss[ops].has("O"):

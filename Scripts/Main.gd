@@ -47,6 +47,13 @@ func _player_connected(id):
 
 func _player_disconnected(id):
 	print("player disconnected:",id)
+	if get_tree().get_root().has_node("Table"):
+		var ps = get_tree().get_root().get_node("Table/OtherPlayers")
+		if ps.has_node(str(id)):
+			ps.get_node(str(id)).queue_free()
+	else:
+		printerr("Table is not current")
+	
 	List._remove_player_from_list(id)
 
 
