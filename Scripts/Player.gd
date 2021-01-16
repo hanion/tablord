@@ -13,6 +13,7 @@ export(float,1,90) var rotating_degree_stepped_default := 45 # is angle
 #######################
 # VARIABLES
 #######################
+
 # current_cast 
 var current = null # is cast
 # object we are currently holding
@@ -257,12 +258,35 @@ func _drag_start(_current):
 
 func _drag_stop():
 	is_dragging = false
+	dragged_over(dragging,current['collider'])
 	dragging = null
 	
 	# debug
 	get_node("../CanvasLayer/Label3").text = "not dragging"
 	get_node("../CanvasLayer/Label5").text =\
 			str(int(get_node("../CanvasLayer/Label5").text)+1)
+
+
+func dragged_over(dragged,over):
+	if dragged == null: return
+	if over == null: return
+	
+#	if dragged.is_in_group("card") and over.is_in_group("card"):
+	# if dragged can interact with over
+	if dragged is card and over is card:
+		# if over is in a deck, add dragged to that deck
+		if over.is_in_deck:
+			net.add_to_deck(dragged.name,over.in_deck.name)
+		# else create new deck
+		else:
+			net.create_deck(dragged.name,over.name)
+	elif dragged is card and over is deck:
+		pass
+
+
+
+
+
 
 
 
@@ -289,6 +313,7 @@ func roll_dice(var obj):
 
 
 
+
 func define_obj_state(obj):
 	var obj_path_short = obj.name
 	
@@ -306,10 +331,3 @@ func define_obj_state(obj):
 	}
 	
 	net.send_state(state)
-
-
-
-
-
-
-

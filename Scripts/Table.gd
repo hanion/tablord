@@ -4,6 +4,9 @@ var currently_moving := []
 var last_world_state = 0
 #TODO rewrite all of the code
 export(float,0.05,1.0) var tween_duration = 0.1
+# deck
+var deck_path = preload("res://Scenes/deck.tscn")
+
 
 #######################
 # OVERRIDE FUNCTIONS 
@@ -85,7 +88,6 @@ func move_player(player,trans_origin = Vector3(0,0,0),CAM = Vector3(0,0,0)):
 				Tween.EASE_IN_OUT
 		)
 		$Tween.start()
-#		_cam_controller.transform.origin = trans_origin
 	 
 	if CAM != Vector3(0,0,0):
 		$Tween.interpolate_property(
@@ -116,15 +118,13 @@ func move_player(player,trans_origin = Vector3(0,0,0),CAM = Vector3(0,0,0)):
 				Tween.EASE_IN_OUT
 			)
 		$Tween.start()
-#		_elevation.rotation_degrees.x = CAM.x
-#		_cam_controller.rotation_degrees.y = CAM.y
-#		_cam.translation.z = CAM.z
 
 
 func process_objects(opss):
 	# opss = object_path_short's
 	# ops = object_path_short
 	for ops in opss:
+		#FIXME make dices under Objects/dices/
 		var _obj = get_node("Objects/cards/"+ops)
 		if $Player.dragging == _obj:
 			printerr("We should have deleted it on line 40-50")
@@ -149,15 +149,57 @@ func process_objects(opss):
 
 
 
+func create_deck(holding,base):
+	print("creating deck with ",holding," , ",base)
+	if $Objects.has_node("d_"+base): return
+	
+	
+	holding = $Objects/cards.get_node(holding)
+	base = $Objects/cards.get_node(base)
+	
+	if holding.is_in_deck:
+		#TODO remove from deck when moved out
+		print("holding is already in deck")
+		return
+	
+	var deck = deck_path.instance()
+	deck.name = "d_"
+	
+	holding.is_in_deck = true
+	holding.in_deck = deck
+	base.is_in_deck = true
+	base.in_deck = deck
+	
+	
+	deck.deck.append(base)
+	deck.deck.append(holding)
+	
+	$Objects.add_child(deck)
+	
+	deck.translation = base.translation + Vector3(0,0,0)
+	deck.organize_cards()
+	
+	$CanvasLayer/Label2.text = "created deck,"+str(deck.deck)
+	print("created deck")
 
-
-
-
-
-
-
-
-
-
-
-
+func add_to_deck(holding,deck):
+	print("adding ",holding," to deck ",deck)
+	
+	
+	holding = $Objects/cards.get_node(holding)
+	deck = $Objects.get_node(deck)
+	
+	if holding.is_in_deck:
+		#TODO remove from deck when moved out
+		print("holding is already in deck")
+		return
+	
+	holding.is_in_deck = true
+	holding.in_deck = deck
+	
+	
+	
+	deck.deck.append(holding)
+	deck.organize_cards()
+	
+	$CanvasLayer/Label2.text = "added to deck,"+str(deck.deck)

@@ -1,11 +1,16 @@
 extends Node
+var Table
 #######################
 # CONFIG
 #######################
 func _ready():
 	rpc_config("receive_state",MultiplayerAPI.RPC_MODE_MASTERSYNC)
-	rpc_config("receive_world_state",MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rpc_config("h_create_deck",MultiplayerAPI.RPC_MODE_MASTERSYNC)
+	rpc_config("h_add_to_deck",MultiplayerAPI.RPC_MODE_MASTERSYNC)
 	
+	rpc_config("receive_world_state",MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rpc_config("c_create_deck",MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rpc_config("c_add_to_deck",MultiplayerAPI.RPC_MODE_REMOTESYNC)
 #######################
 # CONNECTIONS
 #######################
@@ -32,6 +37,12 @@ func send_state(state):
 		_frames = 0
 	
 
+func create_deck(holding,base):
+	print("netcreate")
+	rpc_id(1,"h_create_deck",holding,base)
+func add_to_deck(holding,deck):
+	print("netadd")
+	rpc_id(1,"h_add_to_deck",holding,deck)
 
 #######################
 # CLIENT
@@ -40,21 +51,26 @@ func send_state(state):
 ## from Main peer_connected
 # the peer who connected to us gives info to us
 remote func new_peer_connected(var Name,var _color := 1,var _shape := 1):
+	Table = get_node("/root/Table")
 	#TODO add colors
 	var id = get_tree().get_rpc_sender_id()
 	List._add_player_to_list(id,Name)
 	print(Name,":",id,",",_color,",",_shape)
 	
 	# spawn puppet node of the player connected 
-	get_node("/root/Table")._add_plo(id)
+	Table._add_plo(id)
 
 remote func receive_world_state(world_state):
 	if world_state.empty():
 		print("WTF ITS EMPTY RECEİVERERERER")
-	get_node("/root/Table").process_received_world_state(world_state)
+	Table.process_received_world_state(world_state)
 
-
-
+remote func c_create_deck(holding,base):
+	Table = get_node("/root/Table")#FOR TESTİNG
+	Table.create_deck(holding,base)
+remote func c_add_to_deck(holding,deck):
+	Table = get_node("/root/Table")#FOR TESTİNG
+	Table.add_to_deck(holding,deck)
 #######################
 # HOST
 #######################
@@ -86,9 +102,14 @@ func send_world_state(world_state):
 	rpc_unreliable("receive_world_state",world_state)
 
 
+remote func h_create_deck(holding,base):
+	# Validate
+	print("h_create")
+	rpc("c_create_deck",holding,base)
 
-
-
+remote func h_add_to_deck(holding,deck):
+	# Validate
+	rpc("c_add_to_deck",holding,deck)
 
 
 

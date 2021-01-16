@@ -13,9 +13,21 @@ _global_script_classes=[ {
 "class": "MonitorPlotPanel",
 "language": "GDScript",
 "path": "res://addons/PerfMonitor/MonitorPlotPanel.gd"
+}, {
+"base": "Spatial",
+"class": "card",
+"language": "GDScript",
+"path": "res://Scripts/card.gd"
+}, {
+"base": "Spatial",
+"class": "deck",
+"language": "GDScript",
+"path": "res://Scripts/deck.gd"
 } ]
 _global_script_class_icons={
-"MonitorPlotPanel": ""
+"MonitorPlotPanel": "",
+"card": "",
+"deck": ""
 }
 
 [application]
