@@ -7,3 +7,4 @@ albedo_color = Color( 0.996078, 0.988235, 0.988235, 1 )
 albedo_texture = ExtResource( 1 )
 metallic = 0.36
 uv1_scale = Vector3( 1, 2, 0 )
+uv1_offset = Vector3( 1.33, 0, 0 )

@@ -160,17 +160,18 @@ func drag():
 	# translating object to desired location
 	dragging.set_translation(trgt)
 	
+	
 	# send loc
 	define_obj_state(dragging)
-	#FIXME remove lookat maybe
-	if true: return
-	# maybe no need to do this because table is flat
-	dragging.look_at(
-		(trgt+current['normal']*-1)*1,
-		#TODO check cards facing direction
-		Vector3.BACK*-1 # if card is facing_face == true?? else reversed
-		)
-	
+#	#FIXMEremove lookat maybe
+#	if true: return
+#	# maybe no need to do this because table is flat
+#	dragging.look_at(
+#		(trgt+current['normal']*-1)*1,
+#		#TODO check cards facing direction
+#		Vector3.BACK*-1 # if card is facing_face == true?? else reversed
+#		)
+#
 
 
 
@@ -208,7 +209,7 @@ func rotate_obj():
 				)
 			# tick one step
 			_obj.rotate_object_local(
-				Vector3.BACK,
+				Vector3.UP,
 				deg2rad(amount)
 				)
 		# resetting currently used degree because we want to rotate once
@@ -216,7 +217,7 @@ func rotate_obj():
 	else:
 		for _obj in obj.get_children():
 			_obj.rotate_object_local(
-				Vector3.BACK,
+				Vector3.UP,
 				deg2rad(_rotating_degree)
 				)
 
@@ -229,37 +230,59 @@ func flip_card():
 	#MAYBE animate it
 	for _obj in obj.get_children():
 		_obj.rotate_object_local(
-			Vector3.UP,
+			Vector3.FORWARD,
 			deg2rad(180)
 			)
 
 
 func _drag_start(_current):
-	if not _current['collider'].is_in_group("draggable"): return
-	
-	is_dragging = true
+	if _current.empty(): return
 	
 	dragging = _current['collider']
+	if not dragging.is_in_group("draggable"): return
+	
 	
 	var event = InputEventMouseMotion.new()
 	var _second_ray = cast_ray(event,true)
 	
-	var off = _current['collider'].get_node("CollisionShape").shape.extents.z
-	var siz = _current['collider'].get_node("CollisionShape").scale.z
+	
+	var off = dragging.get_node("CollisionShape").shape.extents.y
+	var siz = dragging.get_node("CollisionShape").scale.y
+	
+	# if its deck bc deck/ is always at the bottom and mesh is moving,
+	## if we make it higher, mesh also would go
+	if dragging is deck:
+		off = 0.05
+		dragging.started_dragging()
 	
 	_dragging_offset = (     Vector3(0,off*siz,0)     )
 	
+	if dragging is card:
+		if dragging.is_in_deck:
+			# 3 = remove cardd
+			net.deck_func(3,_get_short_path(dragging))
+	
+	#IMPORTANT this line is whole point of this func
+	is_dragging = true
+	
 	# debug
 	get_node("../CanvasLayer/Label3").text = \
-			"dragging:"+str(_current['collider'].name)
+			"dragging:"+str(dragging.name)
 	get_node("../CanvasLayer/Label").text =\
 			str(int(get_node("../CanvasLayer/Label").text)+1)
 
 
 func _drag_stop():
-	is_dragging = false
+	if current.empty(): return
+	
+	if dragging is deck:
+		dragging.stopped_dragging()
+	
 	dragged_over(dragging,current['collider'])
+	
 	dragging = null
+	#IMPORTANT this line is whole point of this func
+	is_dragging = false
 	
 	# debug
 	get_node("../CanvasLayer/Label3").text = "not dragging"
@@ -271,19 +294,44 @@ func dragged_over(dragged,over):
 	if dragged == null: return
 	if over == null: return
 	
-#	if dragged.is_in_group("card") and over.is_in_group("card"):
 	# if dragged can interact with over
 	if dragged is card and over is card:
+		var d_sp = _get_short_path(dragged)
+		var o_sp = _get_short_path(over)
+		
 		# if over is in a deck, add dragged to that deck
 		if over.is_in_deck:
-			net.add_to_deck(dragged.name,over.in_deck.name)
+			var o_d_sp = _get_short_path(over.in_deck)
+			# 2 = add
+			net.deck_func(2,d_sp,o_d_sp)
 		# else create new deck
 		else:
-			net.create_deck(dragged.name,over.name)
+			# 1 = create
+			net.deck_func(1,d_sp,o_sp)
 	elif dragged is card and over is deck:
-		pass
+		var d_sp = _get_short_path(dragged)
+		var o_sp = _get_short_path(over)
+		
+		# 2 = create
+		net.deck_func(2,d_sp,o_sp)
 
 
+func _get_short_path(var obje)-> String:
+	var pt = obje.get_path()
+	var arry = str(pt).split("/",false)
+	
+	var is_passed_objs_node = false
+	var nw_txt = ""
+	
+	for t in arry:
+		if t == "Objects":
+			is_passed_objs_node = true
+		elif is_passed_objs_node:
+			nw_txt += "/"+t
+	
+	# it is like /cards/areapoly3
+	# it is like /areapoly2/areapoly3
+	return nw_txt
 
 
 
@@ -315,7 +363,7 @@ func roll_dice(var obj):
 
 
 func define_obj_state(obj):
-	var obj_path_short = obj.name
+	var obj_path_short = _get_short_path(obj)
 	
 	var state = {
 		0:{

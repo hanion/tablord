@@ -5,12 +5,10 @@ var Table
 #######################
 func _ready():
 	rpc_config("receive_state",MultiplayerAPI.RPC_MODE_MASTERSYNC)
-	rpc_config("h_create_deck",MultiplayerAPI.RPC_MODE_MASTERSYNC)
-	rpc_config("h_add_to_deck",MultiplayerAPI.RPC_MODE_MASTERSYNC)
+	rpc_config("h_deck_func",MultiplayerAPI.RPC_MODE_MASTERSYNC)
 	
 	rpc_config("receive_world_state",MultiplayerAPI.RPC_MODE_REMOTESYNC)
-	rpc_config("c_create_deck",MultiplayerAPI.RPC_MODE_REMOTESYNC)
-	rpc_config("c_add_to_deck",MultiplayerAPI.RPC_MODE_REMOTESYNC)
+	rpc_config("c_deck_func",MultiplayerAPI.RPC_MODE_REMOTESYNC)
 #######################
 # CONNECTIONS
 #######################
@@ -35,14 +33,16 @@ func send_state(state):
 	if _frames%update_frame_time == 0:
 		rpc_unreliable_id(1,"receive_state",state)
 		_frames = 0
-	
 
-func create_deck(holding,base):
-	print("netcreate")
-	rpc_id(1,"h_create_deck",holding,base)
-func add_to_deck(holding,deck):
-	print("netadd")
-	rpc_id(1,"h_add_to_deck",holding,deck)
+
+# fonc: 
+# 0 = empty,
+# 1 = create_deck,
+# 2 = add_to_deck,
+# 3 = remove_from_deck,
+# 4 = remove_deck
+func deck_func(var fonc := 0, var var1 = null, var var2 = null):
+	rpc_id(1,"h_deck_func",fonc,var1,var2)
 
 #######################
 # CLIENT
@@ -65,17 +65,15 @@ remote func receive_world_state(world_state):
 		print("WTF ITS EMPTY RECEİVERERERER")
 	Table.process_received_world_state(world_state)
 
-remote func c_create_deck(holding,base):
+
+remote func c_deck_func(fonc,var1,var2):
 	Table = get_node("/root/Table")#FOR TESTİNG
-	Table.create_deck(holding,base)
-remote func c_add_to_deck(holding,deck):
-	Table = get_node("/root/Table")#FOR TESTİNG
-	Table.add_to_deck(holding,deck)
+	Table.deck_fonc(fonc,var1,var2)
+
 #######################
 # HOST
 #######################
 var world_state_collection := {}
-
 
 remote func receive_state(state):
 	if state.has(0):
@@ -93,8 +91,6 @@ remote func receive_state(state):
 			world_state_collection[player_id] = state
 	else:
 		world_state_collection[player_id] = state
-	
-
 
 func send_world_state(world_state):
 	if world_state.empty():
@@ -102,17 +98,8 @@ func send_world_state(world_state):
 	rpc_unreliable("receive_world_state",world_state)
 
 
-remote func h_create_deck(holding,base):
-	# Validate
-	print("h_create")
-	rpc("c_create_deck",holding,base)
-
-remote func h_add_to_deck(holding,deck):
-	# Validate
-	rpc("c_add_to_deck",holding,deck)
-
-
-
+remote func h_deck_func(fonc,var1,var2):
+	rpc("c_deck_func",fonc,var1,var2)
 
 
 

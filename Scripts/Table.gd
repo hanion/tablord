@@ -2,7 +2,6 @@ extends Spatial
 
 var currently_moving := []
 var last_world_state = 0
-#TODO rewrite all of the code
 export(float,0.05,1.0) var tween_duration = 0.1
 # deck
 var deck_path = preload("res://Scenes/deck.tscn")
@@ -49,9 +48,11 @@ func process_received_world_state(world_state):
 	world_state.erase(get_tree().get_network_unique_id())
 	if $Player.is_dragging and $Player.dragging != null:
 		if world_state.has(0):
-			if world_state[0].has($Player.dragging.name):
-				world_state[0].erase($Player.dragging.name)
-	
+			if world_state[0].has($Player._get_short_path($Player.dragging)):
+				world_state[0].erase($Player._get_short_path($Player.dragging))
+			# if we deleted our object and 0 is empty, delete 0
+			if world_state[0].empty():
+				world_state.erase(0)
 	# if it was only me, return
 	if world_state.empty(): return
 	
@@ -119,13 +120,16 @@ func move_player(player,trans_origin = Vector3(0,0,0),CAM = Vector3(0,0,0)):
 			)
 		$Tween.start()
 
-
 func process_objects(opss):
 	# opss = object_path_short's
 	# ops = object_path_short
 	for ops in opss:
 		#FIXME make dices under Objects/dices/
-		var _obj = get_node("Objects/cards/"+ops)
+		print("ops is === ",ops)
+		var _obj = get_node("Objects"+ops)
+		if _obj == null:
+			printerr("_obj is null, in opss/ops")
+			return
 		if $Player.dragging == _obj:
 			printerr("We should have deleted it on line 40-50")
 			return
@@ -146,60 +150,117 @@ func process_objects(opss):
 			_obj.rotation_degrees = opss[ops]["R"]
 
 
-
-
+# fonc: 
+# 0 = empty,
+# 1 = create_deck,
+# 2 = add_to_deck,
+# 3 = remove_from_deck,
+# 4 = remove_deck #MAYBE auto remove deck when its only one from deck
+func deck_fonc(fonc,var1,var2):
+	match fonc:
+		0:
+			printerr("deck_fonc: fonc is emtpy",fonc,var1,var2)
+		1:
+			print("df: creating deck ",var1,var2)
+			create_deck(var1,var2)
+		2:
+			print("df: adding to deck",var1,var2)
+			add_to_deck(var1,var2)
+		3:
+			print("df: removing from deck",var1,var2)
+			remove_card_from_deck(var1)
 
 func create_deck(holding,base):
-	print("creating deck with ",holding," , ",base)
-	if $Objects.has_node("d_"+base): return
+	if base == null:
+		printerr("T:base is null, cant create deck")
+		return
+	if holding == null:
+		printerr("T:holding is null, cant create deck")
+		return
 	
-	
-	holding = $Objects/cards.get_node(holding)
-	base = $Objects/cards.get_node(base)
+	holding = get_node("Objects"+holding)
+	base = get_node("Objects"+base)
 	
 	if holding.is_in_deck:
-		#TODO remove from deck when moved out
-		print("holding is already in deck")
+		print("T:holding is already in deck, cant create deck")
 		return
+	if base.is_in_deck:
+		print("T:base is already in deck, cant create deck")
+		return
+	
+	# MAYBE check if there is already a deck and create (1) of that
+	
+	print("creating deck with ",holding," , ",base)
+	
 	
 	var deck = deck_path.instance()
-	deck.name = "d_"
+	deck.name = base.name # MAYBE this fixes random names problem
 	
-	holding.is_in_deck = true
-	holding.in_deck = deck
-	base.is_in_deck = true
-	base.in_deck = deck
-	
-	
-	deck.deck.append(base)
-	deck.deck.append(holding)
-	
+	deck.transform.origin = base.transform.origin
 	$Objects.add_child(deck)
 	
-	deck.translation = base.translation + Vector3(0,0,0)
-	deck.organize_cards()
+	deck.add_card(base)
+	deck.add_card(holding)
 	
-	$CanvasLayer/Label2.text = "created deck,"+str(deck.deck)
-	print("created deck")
+	
+	$CanvasLayer/Label2.text = "created deck,"+str(deck.dek)
 
 func add_to_deck(holding,deck):
-	print("adding ",holding," to deck ",deck)
-	
-	
-	holding = $Objects/cards.get_node(holding)
-	deck = $Objects.get_node(deck)
-	
-	if holding.is_in_deck:
-		#TODO remove from deck when moved out
-		print("holding is already in deck")
+	if deck == null:
+		printerr("T:deck is null, cant add to deck")
+		return
+	if holding == null:
+		printerr("T:holding is null, cant add to deck")
 		return
 	
-	holding.is_in_deck = true
-	holding.in_deck = deck
+	holding = get_node("Objects"+holding)
+	deck = get_node("Objects"+deck)
+	
+	if deck == null:
+		printerr("T:2deck is null, cant add to deck")
+		return
+	if holding == null:
+		printerr("T:2holding is null, cant add to deck")
+		return
+	
+	if holding.is_in_deck:
+		print("T:holding is already in deck, cant add to deck")
+		return
 	
 	
+	deck.add_card(holding)
 	
-	deck.deck.append(holding)
-	deck.organize_cards()
 	
-	$CanvasLayer/Label2.text = "added to deck,"+str(deck.deck)
+	$CanvasLayer/Label2.text = "added to deck,"+str(deck.dek)
+
+func remove_card_from_deck(crd):
+	if crd == null:
+		printerr("T:crd is null, cant remove from deck")
+		return
+	
+	crd = get_node("Objects"+crd)
+	
+	if crd == null:
+		printerr("T:2crd is null, cant remove from deck")
+		return
+	
+	if not crd.is_in_deck:
+		if crd.in_deck == null:
+			printerr("T:crd isnt even in deck, cant remove")
+			return
+		else:
+			printerr("T:WTF IS HAPPENING")
+	
+	var deck = crd.in_deck
+	
+	deck.remove_card(crd)
+	
+	$CanvasLayer/Label2.text = "removed card from deck,crd="+str(crd)
+
+
+
+
+
+
+
+

@@ -37,5 +37,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13 )
 [node name="Tween" type="Tween" parent="CamController"]
 
 [node name="origin" type="MeshInstance" parent="CamController"]
+visible = false
 mesh = SubResource( 2 )
 material/0 = null

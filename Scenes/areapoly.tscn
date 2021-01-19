@@ -3,10 +3,10 @@
 [ext_resource path="res://Assets/Table/cards/card_mat.tres" type="Material" id=1]
 [ext_resource path="res://Scripts/card.gd" type="Script" id=2]
 
-[sub_resource type="BoxShape" id=9]
+[sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.562, 0.687, 0.012 )
 
-[sub_resource type="CubeMesh" id=10]
+[sub_resource type="CubeMesh" id=2]
 material = ExtResource( 1 )
 size = Vector3( 1.125, 1.375, 0.025 )
 
@@ -24,9 +24,9 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 1.42109e-14, 0, 5.68434e-14, 1, 0, 1.77636e-15, -7.45058e-09 )
-shape = SubResource( 9 )
+shape = SubResource( 1 )
 
 [node name="card" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 4.26326e-14, 1, 0, 3.55271e-15, -1.49012e-08 )
-mesh = SubResource( 10 )
+mesh = SubResource( 2 )
 material/0 = null
